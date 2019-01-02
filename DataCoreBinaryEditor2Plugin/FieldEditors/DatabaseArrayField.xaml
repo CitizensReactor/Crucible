@@ -1,0 +1,139 @@
+﻿<local:DatabaseFieldEditorBase x:Class="DataCoreBinary2.DatabaseFieldEditors.DatabaseArrayField" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DataCoreBinary2.DatabaseFieldEditors"
+             mc:Ignorable="d" 
+             d:DesignWidth="780"
+             d:DesignHeight="480">
+    <Border Margin="0,2" BorderThickness="1" BorderBrush="#20000000">
+        <StackPanel Orientation="Vertical" Margin="{StaticResource FieldEditor_Container_Property_Padding}">
+            <Grid Background="{StaticResource FieldEditor_Layer2}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Expander 
+                    x:Name="expanderToggle"
+                    HorizontalAlignment="Stretch"   
+                    >
+                    <Expander.IsEnabled>
+                        <Binding Path="ArrayLength" Converter="{StaticResource GreaterThanZero}" Mode="OneWay"/>
+                    </Expander.IsEnabled>
+                    <!--name = Root  IsEnabled="{Binding Path=Reflexive.Items.Count, Converter={StaticResource GreaterThanZero}}"-->
+                    <Expander.IsExpanded>
+                        <MultiBinding Converter="{StaticResource ExpanderAllTrue}">
+                            <Binding Path="IsExpanded"/>
+                            <Binding Path="ArrayLength" Converter="{StaticResource GreaterThanZero}" Mode="OneWay"/>
+                        </MultiBinding>
+                    </Expander.IsExpanded>
+                    <Expander.Header>
+                        <TextBlock>
+                            <Run Foreground="{StaticResource FieldEditor_Foreground}" Text="{Binding PropertyName, FallbackValue='property_name', Mode=OneWay}"/>
+                            <Span FontStyle="Italic" Foreground="{StaticResource FieldEditor_Foreground}">
+                                <Run Text="Structure:"/>
+                                <Run Text="{Binding PropertyTypeName, Converter={StaticResource LowerCaseConverter}, FallbackValue='stored_type', Mode=OneWay}"/>
+                                <!--<Run Text="{Binding Reflexive.Items.Count, FallbackValue='stored_type', Mode=OneWay}"/>
+                                <Run Text="instances"/>-->
+                            </Span>
+                        </TextBlock>
+                    </Expander.Header>
+                </Expander>
+                <!--<ComboBox
+                    x:Name="indices"
+                    Grid.Column="1"
+                    MinWidth="50" 
+                    SelectionChanged="indices_SelectionChanged"
+                    ItemsSource="{Binding Path=Indices, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding Path=Indices.Count, Converter={StaticResource IndexToEnabledConverter}}"
+                    />-->
+
+
+
+                <Button 
+                    Visibility="Collapsed"
+                    Margin="0,0,0,0"
+                    Grid.Column="1"
+                    Content="⚙" 
+                    Width="25" 
+                    Height="24"
+                    FontWeight="Bold" 
+                    IsEnabled="False"
+                    />
+
+                <!-- IsEnabled="{Binding Path=Index, Mode=OneWay, Converter={StaticResource IndexToEnabledConverter}}" -->
+                <ToggleButton 
+                    Visibility="Collapsed"
+                    Margin="4,0,0,0"
+                    Grid.Column="2"
+                    x:Name="infoToggle"
+                    Content="i" 
+                    Width="25" 
+                    FontSize="15"
+                    ToolTip="Show/Hide Information" 
+                    IsChecked="False"/>
+
+
+                <StackPanel Orientation="Horizontal" Grid.Column="3">
+                    <Button 
+                        Margin="4,0,0,0"
+                        Padding="0,-3,0,0"
+                        Content="-" 
+                        Width="25" 
+                        Height="24"
+                        FontSize="15" 
+                        FontWeight="Bold" 
+                        ToolTip="Remove a new entry or reorder existing ones"
+                        Click="DeleteInstance">
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{StaticResource AllTrue}">
+                                <Binding Path="ArrayLength" Converter="{StaticResource GreaterThanZero}" Mode="OneWay"/>
+                                <Binding Path="IsReadOnly" Mode="OneWay"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+                    <Button
+                        Margin="4,0,0,0"
+                        Padding="0,-3,0,0"
+                        Content="+" 
+                        Width="25" 
+                        Height="24"
+                        FontSize="15" 
+                        FontWeight="Bold" 
+                        ToolTip="Add a new entry or reorder existing ones" 
+                        Click="CreateInstance"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="5" Margin="4,0,0,0" Visibility="{Binding ShowMultiplePreviewItems, Converter={StaticResource BooleanToInvisibility}}">
+                    <!--<StackPanel.Visibility>
+                        <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                            <Binding Path="ArrayLength" Converter="{StaticResource GreaterThanZero}" Mode="OneWay"/>
+                            <Binding Path="IsReadOnly" Converter="{StaticResource InvertBoolean}" Mode="OneWay"/>
+                        </MultiBinding>
+                    </StackPanel.Visibility>-->
+                    <Button Content="⮜" Width="25" Height="24" FontWeight="Bold" Click="Deincrement" IsEnabled="{Binding IsMinIndex, Converter={StaticResource InvertBoolean}}"/>
+                    <TextBox Width="50" Grid.Column="6"
+                         Text="{Binding CurrentIndex}"
+                         TextChanged="TextBox_TextChanged">
+                        <TextBox.IsEnabled>
+                            <MultiBinding Converter="{StaticResource AllTrue}">
+                                <Binding Path="ArrayLength" Converter="{StaticResource GreaterThanZero}" Mode="OneWay"/>
+                                <Binding Path="IsReadOnly" Converter="{StaticResource InvertBoolean}" Mode="OneWay"/>
+                            </MultiBinding>
+                        </TextBox.IsEnabled>
+                    </TextBox>
+                    <Button Content="⮞" Width="25" Height="24" FontWeight="Bold" Click="Increment" IsEnabled="{Binding IsMaxIndex, Converter={StaticResource InvertBoolean}}"/>
+                </StackPanel>
+            </Grid>
+            <StackPanel Name="Root" Visibility="{Binding IsExpanded, ElementName=expanderToggle, Converter={StaticResource BooleanToVisibility}}"/>
+
+        </StackPanel>
+    </Border>
+</local:DatabaseFieldEditorBase>

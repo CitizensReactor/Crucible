@@ -1,0 +1,135 @@
+﻿<local:BindableWindow 
+    x:Class="Crucible.MainWindow"
+    x:ClassModifier="public"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Crucible="clr-namespace:Crucible"
+    xmlns:local="clr-namespace:Crucible"
+    xmlns:presentation2009="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+    mc:Ignorable="d"
+    SnapsToDevicePixels="True"
+    WindowStyle="None"
+    ResizeMode="CanResizeWithGrip" 
+    FontFamily="Tahoma"
+    Title="Crucible"
+    WindowStartupLocation="CenterScreen"
+    Height="972"
+    Width="1728">
+    <!--<Window.Resources>
+        <presentation2009:RoutedCommand x:Key="SaveAllRoutedCommand"/>
+    </Window.Resources>-->
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5"/>
+    </WindowChrome.WindowChrome>
+    <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="NewCommandBinding_Executed"/>
+        <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"/>
+        <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed"/>
+        <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static local:MainWindow.SaveAllRoutedCommand}" Executed="SaveAllCommandBinding_Executed" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+N" Command="New"/>
+        <KeyBinding Gesture="Ctrl+O" Command="Open"/>
+        <KeyBinding Gesture="Ctrl+S" Command="Save"/>
+        <KeyBinding Gesture="Ctrl+Alt+S" Command="SaveAs"/>
+        <KeyBinding Gesture="Ctrl+Shift+S" Command="{x:Static local:MainWindow.SaveAllRoutedCommand}"/>
+    </Window.InputBindings>
+    <Border Margin="0" BorderThickness="1" BorderBrush="{StaticResource Editor_Accent}" Background="{StaticResource Editor_Dark_Background}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="54"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" MouseDown="Titlebar_MouseDown" Background="{StaticResource Editor_Dark_Background}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button x:Name="btnMinimize" Click="Minimize_Click" Style="{StaticResource MinimizeButton}"/>
+                    <Button x:Name="btnMaximize" Click="MaximizeToggle_Click" Style="{StaticResource MaximizeButton}" Visibility="{Binding WindowState, RelativeSource={RelativeSource AncestorType=local:BindableWindow}, Converter={StaticResource MaximizedToInvisibility}}"/>
+                    <Button x:Name="btnRestore" Click="MaximizeToggle_Click" Style="{StaticResource RestoreButton}" Visibility="{Binding WindowState, RelativeSource={RelativeSource AncestorType=local:BindableWindow}, Converter={StaticResource MaximizedToVisibility}}"/>
+                    <Button x:Name="btnClose" Click="Close_Click" Style="{StaticResource CloseButton}"/>
+                </StackPanel>
+                <Image IsHitTestVisible="False" Margin="13,6" Width="22" Height="22" Source="{Binding Path=Icon, RelativeSource={RelativeSource AncestorType=local:BindableWindow}}" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <TextBlock Margin="43,9" IsHitTestVisible="False" Foreground="{StaticResource Editor_Dark_Foreground}">
+                <Run Text="{Binding Title, RelativeSource={RelativeSource AncestorType=local:BindableWindow}, FallbackValue=Crucible}"/>
+                </TextBlock>
+                <Menu DockPanel.Dock="Top" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3">
+                    <MenuItem Header="_File" Style="{StaticResource MenuItemRoot}">
+                        <MenuItem Visibility="Collapsed" Header="_New" Command="New" InputGestureText="Ctrl+N" />
+                        <MenuItem x:Name="Menu_Open" Header="_Open" Command="Open" InputGestureText="Ctrl+O" />
+                        <MenuItem x:Name="Menu_Close" Header="_Close" Click="Menu_Close_Click" IsEnabled="{Binding Title, RelativeSource={RelativeSource AncestorType=local:BindableWindow}, FallbackValue=Crucible}" />
+                        <Separator Visibility="Collapsed" />
+                        <MenuItem Visibility="Collapsed" IsEnabled="False" Header="_Save" Command="Save" InputGestureText="Ctrl+S" />
+                        <MenuItem Visibility="Collapsed" IsEnabled="False" Header="_Save As" Command="SaveAs" InputGestureText="Ctrl+Alt+S" />
+                        <MenuItem Visibility="Collapsed" IsEnabled="False" Header="_Save All" Command="{x:Static local:MainWindow.SaveAllRoutedCommand}" InputGestureText="Ctrl+Shift+S" />
+                        <Separator Visibility="Collapsed" />
+                        <MenuItem Visibility="Collapsed" Header="Manage _Plugins" Click="ManagePlugins"/>
+                        <Separator />
+                        <MenuItem x:Name="StartReadOnly" Header="Start Read Only" IsCheckable="True" />
+                        <Separator />
+                        <MenuItem Header="Extract All" Click="ExtractClick" />
+                        <Separator />
+                        <MenuItem Header="_Exit" Click="Menu_Exit_Click" InputGestureText="Alt+F4" />
+                    </MenuItem>
+                    <MenuItem Header="_View">
+                        <MenuItem Header="Close All Tabs" Click="MenuItem_CloseAllTabs" IsEnabled="{Binding Items.Count, ElementName=Tabs, Converter={StaticResource GreaterThanZero}}" />
+                    </MenuItem>
+                    <MenuItem x:Name="PluginsMenu" x:FieldModifier="public" Header="_Plugins" Visibility="{Binding RelativeSource={RelativeSource Self},Path=Items.Count, Converter={StaticResource GreaterThanZero}}"/>
+                    <MenuItem Header="Help">
+                        <MenuItem Header="Associate Filetypes" Click="AssociateFiletypes_Click"/>
+                        <Separator />
+                        <MenuItem Header="Citizens Reactor _Reddit" Click="Goto_Reddit" />
+                        <MenuItem Header="Citizens Reactor _Discord" Click="Goto_Discord" />
+                        <Separator />
+                        <MenuItem Header="About" Click="ViewAbout" />
+                    </MenuItem>
+                </Menu>
+            </Grid>
+            <Grid Grid.Row="1" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="575" MinWidth="350"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Background="{StaticResource Editor_Medium_Background}">
+                        <TabControl Grid.ColumnSpan="3">
+                            <TabItem Header="P4K Filesystem" x:Name="P4KFilesystemTab" />
+                        </TabControl>
+                    </Grid>
+                    <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="3" />
+                    <Grid Grid.Row="2" Background="{StaticResource Editor_Medium_Background}">
+                        <TabControl Grid.ColumnSpan="3">
+                            <TabItem Header="Local Filesystem" x:Name="LocalFilesystemTab"/>
+                        </TabControl>
+                    </Grid>
+                </Grid>
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <DockPanel Grid.Column="2" Grid.ColumnSpan="2" Background="{StaticResource Editor_Medium_Background}">
+                    <TabControl x:Name="Tabs" ItemContainerStyle="{StaticResource ClosableTab}"/>
+                </DockPanel>
+            </Grid>
+            <DockPanel Grid.Row="2">
+                <StatusBar Height="22" HorizontalAlignment="Stretch" Foreground="{StaticResource Editor_Accent_Foreground}">
+                    <StatusBarItem HorizontalContentAlignment="Left">
+                        <TextBlock x:Name="TextBlockStatus" Margin="5,0,0,0" />
+                    </StatusBarItem>
+                    <StatusBarItem HorizontalContentAlignment="Right" Padding="0">
+                        <StackPanel Orientation="Horizontal" Margin="0,1,22,1">
+                            <Button Height="22" Click="ExtractionCancel" Visibility="{Binding Extracting, Converter={StaticResource BooleanToVisibility}}">Cancel</Button>
+                            <ProgressBar x:Name="ProgressBarMain" IsIndeterminate="True" Height="15" Width="200" Margin="5,0,0,0" />
+                            <TextBlock x:Name="TextBlockInfo" TextAlignment="Right" />
+                        </StackPanel>
+                    </StatusBarItem>
+                </StatusBar>
+            </DockPanel>
+        </Grid>
+    </Border>
+</local:BindableWindow>

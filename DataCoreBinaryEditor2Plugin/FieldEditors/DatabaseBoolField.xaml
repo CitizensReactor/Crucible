@@ -1,0 +1,31 @@
+﻿<local:DatabaseFieldEditorBase x:Class="DataCoreBinary2.DatabaseFieldEditors.DatabaseBoolField" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DataCoreBinary2.DatabaseFieldEditors"
+             mc:Ignorable="d" 
+             d:DesignHeight="28" 
+             d:DesignWidth="780">
+    <Border Padding="{StaticResource FieldEditor_Generic_Property_Padding}">
+        <Grid >
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                    x:Name="lblValueName" 
+                    Text="{Binding PropertyName, FallbackValue='property_name'}" 
+                    ToolTip="{Binding PropertyName}" 
+                    Width="200" 
+                    VerticalAlignment="Center" 
+                    Margin="0,0,0,0"
+                    TextTrimming="CharacterEllipsis"
+                    />
+                <StackPanel Height="24" Orientation="Horizontal" Name="StackPanel1">
+                    <Viewbox Width="18">
+                        <CheckBox IsChecked="{Binding Value}"/>
+                    </Viewbox>
+                </StackPanel>
+                <TextBlock x:Name="lblType" Text="{Binding PropertyTypeName, FallbackValue='variable_type'}" VerticalAlignment="Center" Width="150" Margin="20,0,0,0" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</local:DatabaseFieldEditorBase>

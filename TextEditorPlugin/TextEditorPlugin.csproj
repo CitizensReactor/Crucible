@@ -1,0 +1,637 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{7CE89FA5-3E79-4E98-A5C3-5D54819C90DA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>TextEditor</RootNamespace>
+    <AssemblyName>TextEditor.Plugin</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EmbeddedResource Include="CodeEditor\editor.html" />
+    <EmbeddedResource Include="CodeEditor\jquery-3.3.1.min.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ace.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-beautify.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-elastic_tabstops_lite.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-emmet.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-error_marker.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-keybinding_menu.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-language_tools.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-linking.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-modelist.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-options.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-searchbox.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-settings_menu.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-spellcheck.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-split.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-static_highlight.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-statusbar.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-textarea.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-themelist.js" />
+    <EmbeddedResource Include="CodeEditor\ace\ext-whitespace.js" />
+    <EmbeddedResource Include="CodeEditor\ace\keybinding-emacs.js" />
+    <EmbeddedResource Include="CodeEditor\ace\keybinding-vim.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-abap.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-abc.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-actionscript.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-ada.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-apache_conf.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-applescript.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-asciidoc.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-assembly_x86.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-autohotkey.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-batchfile.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-bro.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-c_cpp.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-c9search.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-cirru.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-clojure.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-cobol.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-coffee.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-coldfusion.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-csharp.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-csound_document.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-csound_orchestra.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-csound_score.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-csp.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-css.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-curly.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-d.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-dart.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-diff.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-django.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-dockerfile.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-dot.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-drools.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-edifact.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-eiffel.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-ejs.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-elixir.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-elm.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-erlang.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-forth.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-fortran.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-ftl.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-gcode.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-gherkin.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-gitignore.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-glsl.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-gobstones.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-golang.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-graphqlschema.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-groovy.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-haml.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-handlebars.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-haskell.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-haskell_cabal.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-haxe.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-hjson.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-html.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-html_elixir.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-html_ruby.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-ini.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-io.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-jack.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-jade.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-java.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-javascript.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-json.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-jsoniq.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-jsp.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-jssm.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-jsx.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-julia.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-kotlin.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-latex.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-less.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-liquid.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-lisp.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-livescript.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-logiql.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-lsl.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-lua.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-luapage.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-lucene.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-makefile.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-markdown.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-mask.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-matlab.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-maze.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-mel.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-mixal.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-mushcode.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-mysql.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-nix.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-nsis.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-objectivec.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-ocaml.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-pascal.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-perl.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-pgsql.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-php.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-pig.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-plain_text.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-powershell.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-praat.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-prolog.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-properties.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-protobuf.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-python.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-r.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-razor.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-rdoc.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-red.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-redshift.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-rhtml.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-rst.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-ruby.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-rust.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-sass.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-scad.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-scala.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-scheme.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-scss.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-sh.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-sjs.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-smarty.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-snippets.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-soy_template.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-space.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-sparql.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-sql.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-sqlserver.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-stylus.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-svg.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-swift.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-tcl.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-tex.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-text.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-textile.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-toml.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-tsx.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-turtle.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-twig.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-typescript.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-vala.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-vbscript.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-velocity.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-verilog.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-vhdl.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-wollok.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-xml.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-xquery.js" />
+    <EmbeddedResource Include="CodeEditor\ace\mode-yaml.js" />
+    <Content Include="CodeEditor\ace\snippets\abap.js" />
+    <Content Include="CodeEditor\ace\snippets\abc.js" />
+    <Content Include="CodeEditor\ace\snippets\actionscript.js" />
+    <Content Include="CodeEditor\ace\snippets\ada.js" />
+    <Content Include="CodeEditor\ace\snippets\apache_conf.js" />
+    <Content Include="CodeEditor\ace\snippets\applescript.js" />
+    <Content Include="CodeEditor\ace\snippets\asciidoc.js" />
+    <Content Include="CodeEditor\ace\snippets\assembly_x86.js" />
+    <Content Include="CodeEditor\ace\snippets\autohotkey.js" />
+    <Content Include="CodeEditor\ace\snippets\batchfile.js" />
+    <Content Include="CodeEditor\ace\snippets\bro.js" />
+    <Content Include="CodeEditor\ace\snippets\c9search.js" />
+    <Content Include="CodeEditor\ace\snippets\cirru.js" />
+    <Content Include="CodeEditor\ace\snippets\clojure.js" />
+    <Content Include="CodeEditor\ace\snippets\cobol.js" />
+    <Content Include="CodeEditor\ace\snippets\coffee.js" />
+    <Content Include="CodeEditor\ace\snippets\coldfusion.js" />
+    <Content Include="CodeEditor\ace\snippets\csharp.js" />
+    <Content Include="CodeEditor\ace\snippets\csound_document.js" />
+    <Content Include="CodeEditor\ace\snippets\csound_orchestra.js" />
+    <Content Include="CodeEditor\ace\snippets\csound_score.js" />
+    <Content Include="CodeEditor\ace\snippets\csp.js" />
+    <Content Include="CodeEditor\ace\snippets\css.js" />
+    <Content Include="CodeEditor\ace\snippets\curly.js" />
+    <Content Include="CodeEditor\ace\snippets\c_cpp.js" />
+    <Content Include="CodeEditor\ace\snippets\d.js" />
+    <Content Include="CodeEditor\ace\snippets\dart.js" />
+    <Content Include="CodeEditor\ace\snippets\diff.js" />
+    <Content Include="CodeEditor\ace\snippets\django.js" />
+    <Content Include="CodeEditor\ace\snippets\dockerfile.js" />
+    <Content Include="CodeEditor\ace\snippets\dot.js" />
+    <Content Include="CodeEditor\ace\snippets\drools.js" />
+    <Content Include="CodeEditor\ace\snippets\edifact.js" />
+    <Content Include="CodeEditor\ace\snippets\eiffel.js" />
+    <Content Include="CodeEditor\ace\snippets\ejs.js" />
+    <Content Include="CodeEditor\ace\snippets\elixir.js" />
+    <Content Include="CodeEditor\ace\snippets\elm.js" />
+    <Content Include="CodeEditor\ace\snippets\erlang.js" />
+    <Content Include="CodeEditor\ace\snippets\forth.js" />
+    <Content Include="CodeEditor\ace\snippets\fortran.js" />
+    <Content Include="CodeEditor\ace\snippets\ftl.js" />
+    <Content Include="CodeEditor\ace\snippets\gcode.js" />
+    <Content Include="CodeEditor\ace\snippets\gherkin.js" />
+    <Content Include="CodeEditor\ace\snippets\gitignore.js" />
+    <Content Include="CodeEditor\ace\snippets\glsl.js" />
+    <Content Include="CodeEditor\ace\snippets\gobstones.js" />
+    <Content Include="CodeEditor\ace\snippets\golang.js" />
+    <Content Include="CodeEditor\ace\snippets\graphqlschema.js" />
+    <Content Include="CodeEditor\ace\snippets\groovy.js" />
+    <Content Include="CodeEditor\ace\snippets\haml.js" />
+    <Content Include="CodeEditor\ace\snippets\handlebars.js" />
+    <Content Include="CodeEditor\ace\snippets\haskell.js" />
+    <Content Include="CodeEditor\ace\snippets\haskell_cabal.js" />
+    <Content Include="CodeEditor\ace\snippets\haxe.js" />
+    <Content Include="CodeEditor\ace\snippets\hjson.js" />
+    <Content Include="CodeEditor\ace\snippets\html.js" />
+    <Content Include="CodeEditor\ace\snippets\html_elixir.js" />
+    <Content Include="CodeEditor\ace\snippets\html_ruby.js" />
+    <Content Include="CodeEditor\ace\snippets\ini.js" />
+    <Content Include="CodeEditor\ace\snippets\io.js" />
+    <Content Include="CodeEditor\ace\snippets\jack.js" />
+    <Content Include="CodeEditor\ace\snippets\jade.js" />
+    <Content Include="CodeEditor\ace\snippets\java.js" />
+    <Content Include="CodeEditor\ace\snippets\javascript.js" />
+    <Content Include="CodeEditor\ace\snippets\json.js" />
+    <Content Include="CodeEditor\ace\snippets\jsoniq.js" />
+    <Content Include="CodeEditor\ace\snippets\jsp.js" />
+    <Content Include="CodeEditor\ace\snippets\jssm.js" />
+    <Content Include="CodeEditor\ace\snippets\jsx.js" />
+    <Content Include="CodeEditor\ace\snippets\julia.js" />
+    <Content Include="CodeEditor\ace\snippets\kotlin.js" />
+    <Content Include="CodeEditor\ace\snippets\latex.js" />
+    <Content Include="CodeEditor\ace\snippets\less.js" />
+    <Content Include="CodeEditor\ace\snippets\liquid.js" />
+    <Content Include="CodeEditor\ace\snippets\lisp.js" />
+    <Content Include="CodeEditor\ace\snippets\livescript.js" />
+    <Content Include="CodeEditor\ace\snippets\logiql.js" />
+    <Content Include="CodeEditor\ace\snippets\lsl.js" />
+    <Content Include="CodeEditor\ace\snippets\lua.js" />
+    <Content Include="CodeEditor\ace\snippets\luapage.js" />
+    <Content Include="CodeEditor\ace\snippets\lucene.js" />
+    <Content Include="CodeEditor\ace\snippets\makefile.js" />
+    <Content Include="CodeEditor\ace\snippets\markdown.js" />
+    <Content Include="CodeEditor\ace\snippets\mask.js" />
+    <Content Include="CodeEditor\ace\snippets\matlab.js" />
+    <Content Include="CodeEditor\ace\snippets\maze.js" />
+    <Content Include="CodeEditor\ace\snippets\mel.js" />
+    <Content Include="CodeEditor\ace\snippets\mixal.js" />
+    <Content Include="CodeEditor\ace\snippets\mushcode.js" />
+    <Content Include="CodeEditor\ace\snippets\mysql.js" />
+    <Content Include="CodeEditor\ace\snippets\nix.js" />
+    <Content Include="CodeEditor\ace\snippets\nsis.js" />
+    <Content Include="CodeEditor\ace\snippets\objectivec.js" />
+    <Content Include="CodeEditor\ace\snippets\ocaml.js" />
+    <Content Include="CodeEditor\ace\snippets\pascal.js" />
+    <Content Include="CodeEditor\ace\snippets\perl.js" />
+    <Content Include="CodeEditor\ace\snippets\pgsql.js" />
+    <Content Include="CodeEditor\ace\snippets\php.js" />
+    <Content Include="CodeEditor\ace\snippets\pig.js" />
+    <Content Include="CodeEditor\ace\snippets\plain_text.js" />
+    <Content Include="CodeEditor\ace\snippets\powershell.js" />
+    <Content Include="CodeEditor\ace\snippets\praat.js" />
+    <Content Include="CodeEditor\ace\snippets\prolog.js" />
+    <Content Include="CodeEditor\ace\snippets\properties.js" />
+    <Content Include="CodeEditor\ace\snippets\protobuf.js" />
+    <Content Include="CodeEditor\ace\snippets\python.js" />
+    <Content Include="CodeEditor\ace\snippets\r.js" />
+    <Content Include="CodeEditor\ace\snippets\razor.js" />
+    <Content Include="CodeEditor\ace\snippets\rdoc.js" />
+    <Content Include="CodeEditor\ace\snippets\red.js" />
+    <Content Include="CodeEditor\ace\snippets\redshift.js" />
+    <Content Include="CodeEditor\ace\snippets\rhtml.js" />
+    <Content Include="CodeEditor\ace\snippets\rst.js" />
+    <Content Include="CodeEditor\ace\snippets\ruby.js" />
+    <Content Include="CodeEditor\ace\snippets\rust.js" />
+    <Content Include="CodeEditor\ace\snippets\sass.js" />
+    <Content Include="CodeEditor\ace\snippets\scad.js" />
+    <Content Include="CodeEditor\ace\snippets\scala.js" />
+    <Content Include="CodeEditor\ace\snippets\scheme.js" />
+    <Content Include="CodeEditor\ace\snippets\scss.js" />
+    <Content Include="CodeEditor\ace\snippets\sh.js" />
+    <Content Include="CodeEditor\ace\snippets\sjs.js" />
+    <Content Include="CodeEditor\ace\snippets\smarty.js" />
+    <Content Include="CodeEditor\ace\snippets\snippets.js" />
+    <Content Include="CodeEditor\ace\snippets\soy_template.js" />
+    <Content Include="CodeEditor\ace\snippets\space.js" />
+    <Content Include="CodeEditor\ace\snippets\sparql.js" />
+    <Content Include="CodeEditor\ace\snippets\sql.js" />
+    <Content Include="CodeEditor\ace\snippets\sqlserver.js" />
+    <Content Include="CodeEditor\ace\snippets\stylus.js" />
+    <Content Include="CodeEditor\ace\snippets\svg.js" />
+    <Content Include="CodeEditor\ace\snippets\swift.js" />
+    <Content Include="CodeEditor\ace\snippets\tcl.js" />
+    <Content Include="CodeEditor\ace\snippets\tex.js" />
+    <Content Include="CodeEditor\ace\snippets\text.js" />
+    <Content Include="CodeEditor\ace\snippets\textile.js" />
+    <Content Include="CodeEditor\ace\snippets\toml.js" />
+    <Content Include="CodeEditor\ace\snippets\tsx.js" />
+    <Content Include="CodeEditor\ace\snippets\turtle.js" />
+    <Content Include="CodeEditor\ace\snippets\twig.js" />
+    <Content Include="CodeEditor\ace\snippets\typescript.js" />
+    <Content Include="CodeEditor\ace\snippets\vala.js" />
+    <Content Include="CodeEditor\ace\snippets\vbscript.js" />
+    <Content Include="CodeEditor\ace\snippets\velocity.js" />
+    <Content Include="CodeEditor\ace\snippets\verilog.js" />
+    <Content Include="CodeEditor\ace\snippets\vhdl.js" />
+    <Content Include="CodeEditor\ace\snippets\wollok.js" />
+    <Content Include="CodeEditor\ace\snippets\xml.js" />
+    <Content Include="CodeEditor\ace\snippets\xquery.js" />
+    <Content Include="CodeEditor\ace\snippets\yaml.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-ambiance.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-chaos.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-chrome.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-clouds.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-clouds_midnight.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-cobalt.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-crimson_editor.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-dawn.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-dracula.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-dreamweaver.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-eclipse.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-github.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-gob.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-gruvbox.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-idle_fingers.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-iplastic.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-katzenmilch.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-kr_theme.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-kuroir.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-merbivore.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-merbivore_soft.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-mono_industrial.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-monokai.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-pastel_on_dark.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-solarized_dark.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-solarized_light.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-sqlserver.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-terminal.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-textmate.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-tomorrow.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-tomorrow_night.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-tomorrow_night_blue.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-tomorrow_night_bright.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-tomorrow_night_eighties.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-twilight.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-vibrant_ink.js" />
+    <EmbeddedResource Include="CodeEditor\ace\theme-xcode.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-coffee.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-css.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-html.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-javascript.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-json.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-lua.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-php.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-xml.js" />
+    <EmbeddedResource Include="CodeEditor\ace\worker-xquery.js" />
+    <Content Include="FodyWeavers.xml" />
+    <Content Include="TextEditorPlugin_Resources\cef.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\cef_100_percent.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\cef_200_percent.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\cef_extensions.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\devtools_resources.pak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\icudtl.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+    <None Include="TextEditorPlugin_Resources\locales\am.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ar.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\bg.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\bn.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ca.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\cs.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\da.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\de.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\el.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\en-GB.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\en-US.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\es-419.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\es.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\et.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\fa.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\fi.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\fil.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\fr.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\gu.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\he.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\hi.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\hr.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\hu.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\id.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\it.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ja.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\kn.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ko.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\lt.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\lv.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ml.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\mr.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ms.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\nb.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\nl.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\pl.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\pt-BR.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\pt-PT.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ro.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ru.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\sk.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\sl.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\sr.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\sv.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\sw.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\ta.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\te.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\th.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\tr.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\uk.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\vi.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\zh-CN.pak" />
+    <None Include="TextEditorPlugin_Resources\locales\zh-TW.pak" />
+    <Content Include="TextEditorPlugin_Resources\natives_blob.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\snapshot_blob.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\v8_context_snapshot.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodeEditor\CodeEditor.xaml.cs">
+      <DependentUpon>CodeEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CodeEditor\CodeEditorLanguage.cs" />
+    <Compile Include="TextEditorPlugin.cs" />
+    <Compile Include="TextEditorTab.cs" />
+    <Compile Include="TextFile.xaml.cs">
+      <DependentUpon>TextFile.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CefSharp, Version=69.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>TextEditorPlugin_Resources\CefSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CefSharp.Core, Version=69.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>TextEditorPlugin_Resources\CefSharp.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CefSharp.WinForms, Version=69.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>TextEditorPlugin_Resources\CefSharp.WinForms.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="CefSharp.Wpf, Version=69.0.0.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>TextEditorPlugin_Resources\CefSharp.Wpf.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Costura, Version=3.2.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.3.2.0\lib\net46\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="CodeEditor\CodeEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TextFile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.BrowserSubprocess.Core.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.BrowserSubprocess.Core.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.BrowserSubprocess.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.BrowserSubprocess.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.Core.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.Core.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.Core.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.WinForms.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.WinForms.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.WinForms.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.Wpf.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.Wpf.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.Wpf.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\CefSharp.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\chrome_elf.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\d3dcompiler_47.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\libcef.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\libEGL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\libGLESv2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TextEditorPlugin_Resources\swiftshader\libEGL.dll" />
+    <Content Include="TextEditorPlugin_Resources\swiftshader\libGLESv2.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Crucible\Crucible.csproj">
+      <Project>{2154c105-bfc8-49e3-b4b6-7751156c46cf}</Project>
+      <Name>Crucible</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.2\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.3.3.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.3.2\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props'))" />
+  </Target>
+</Project>

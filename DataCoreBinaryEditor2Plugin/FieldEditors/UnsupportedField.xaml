@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="DataCoreBinary2.FieldEditors.UnsupportedField"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DataCoreBinary2.FieldEditors"
+             mc:Ignorable="d"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Border Padding="{StaticResource FieldEditor_Generic_Property_Padding}" BorderThickness="1" BorderBrush="#50FF7F7F">
+            <TextBlock Foreground="#FF7F7F">
+                <Run Text="{Binding Path=PropertyInfo.PropertyType.Name, Mode=OneWay, FallbackValue=property_type}" />
+                <Run Text="{Binding Path=PropertyInfo.Name, Mode=OneWay, FallbackValue=property_name}" />
+                <Run Text="is not supported"/>
+            </TextBlock>
+        </Border>
+    </Grid>
+</UserControl>

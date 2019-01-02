@@ -1,0 +1,160 @@
+﻿<crucible:BindableUserControl 
+    x:Class="Crucible.Filesystem.FilesystemView"
+    x:ClassModifier="internal"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:Crucible.Filesystem"
+    xmlns:crucible="clr-namespace:Crucible"
+    xmlns:filesystem="clr-namespace:Crucible.Filesystem"
+    xmlns:sd="http://icsharpcode.net/sharpdevelop/treeview"
+    mc:Ignorable="d"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <sd:SharpTreeView x:Name="treeView2"
+                              AllowDrop="True"
+                              ShowAlternation="True"
+                              Grid.Column="1">
+                <ListView.View>
+                    <sd:SharpGridView>
+                        <GridView.Columns>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <sd:SharpTreeNodeView />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <!--<GridViewColumn Header="Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FileName}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>-->
+                            <GridViewColumn Header="Date modified">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FileModified, StringFormat=g}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Type">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FileType}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Size" Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Background="Red" HorizontalAlignment="Stretch" Text="{Binding FileSizeStr}" TextAlignment="Right">
+                                            <TextBlock.Visibility>
+                                                <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                                    <Binding Path="FilesystemEntry.IsDirectory" Converter="{StaticResource InvertBoolean}"/>
+                                                    <Binding Path="FileSize" Converter="{StaticResource GreaterThanOrEqualZero}"/>
+                                                </MultiBinding>
+                                            </TextBlock.Visibility>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </sd:SharpGridView>
+                </ListView.View>
+            </sd:SharpTreeView>
+        </Grid>
+        <TreeView
+            Grid.Row="1"
+            Name="filesystemTreeView"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            Style="{StaticResource FilesystemTreeView}"
+            ItemsSource="{Binding Items}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource FilesystemTreeViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="filesystemTreeView_LeftMouseDoubleClick" />
+                    <EventSetter Event="MouseLeave" Handler="TreeViewItem_MouseMove"/>
+                    <EventSetter Event="MouseEnter" Handler="TreeViewItem_MouseMove"/>
+                    <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type filesystem:IFilesystemEntry}" ItemsSource="{Binding Items}">
+                    <StackPanel Name="Panel" Orientation="Horizontal" Height="20" ToolTip="{Binding FullPath}" Initialized="ItemInitialized">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Open" Click="FileContextMenu_Click_Open">
+                                    <MenuItem.Visibility>
+                                        <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                            <Binding Path="IsDirectory"/>
+                                            <Binding Path="IsExpanded" Converter="{StaticResource InvertBoolean}"/>
+                                        </MultiBinding>
+                                    </MenuItem.Visibility>
+                                </MenuItem>
+                                <MenuItem Header="Close" Click="FileContextMenu_Click_Open">
+                                    <MenuItem.Visibility>
+                                        <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                            <Binding Path="IsDirectory"/>
+                                            <Binding Path="IsExpanded"/>
+                                        </MultiBinding>
+                                    </MenuItem.Visibility>
+                                </MenuItem>
+                                <MenuItem Header="Open" Click="FileContextMenu_Click_Open" Visibility="{Binding IsDirectory, Converter={StaticResource BooleanToInvisibility}}" />
+                                <Separator />
+                                <MenuItem Header="Extract All" Click="FileContextMenu_Click_Extract" Visibility="{Binding IsDirectory, Converter={StaticResource BooleanToVisibility}}" />
+                                <MenuItem Header="Extract All To" Click="FileContextMenu_Click_Extract_To" Visibility="{Binding IsDirectory, Converter={StaticResource BooleanToVisibility}}" />
+                                <MenuItem Header="Extract" Click="FileContextMenu_Click_Extract" Visibility="{Binding IsDirectory, Converter={StaticResource BooleanToInvisibility}}" />
+                                <MenuItem Header="Extract To" Click="FileContextMenu_Click_Extract_To" Visibility="{Binding IsDirectory, Converter={StaticResource BooleanToInvisibility}}" />
+                                <MenuItem Header="Extract (Raw Encrypted)" Click="FileContextMenu_Click_CustomExtract">
+                                    <MenuItem.Visibility>
+                                        <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                            <Binding Path="IsDirectory" Converter="{StaticResource InvertBoolean}"/>
+                                            <Binding Path="IsEncrypted"/>
+                                        </MultiBinding>
+                                    </MenuItem.Visibility>
+                                </MenuItem>
+                                <MenuItem Header="Extract (Raw Encrypted) To" Click="FileContextMenu_Click_CustomExtract_To">
+                                    <MenuItem.Visibility>
+                                        <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                            <Binding Path="IsDirectory" Converter="{StaticResource InvertBoolean}"/>
+                                            <Binding Path="IsEncrypted"/>
+                                        </MultiBinding>
+                                    </MenuItem.Visibility>
+                                </MenuItem>
+                                <MenuItem Header="Cut" IsEnabled="false" Visibility="Collapsed" />
+                                <MenuItem Header="Copy" IsEnabled="false" Visibility="Collapsed" />
+                                <Separator Visibility="Collapsed" />
+                                <MenuItem Header="Delete" IsEnabled="false" Visibility="Collapsed" />
+                                <MenuItem Header="Rename" IsEnabled="false" Visibility="Collapsed" />
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
+
+
+                        <Image Height="16px" Width="Auto" Source="{Binding Converter={StaticResource FilesystemTreeViewItemToIconConverter}, ConverterParameter=small}" OpacityMask="{x:Null}" Margin="0,2" />
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="4,0">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsEncrypted}" Value="true">
+                                            <Setter Property="Foreground" Value="#FF8989FF"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}"/>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </Grid>
+</crucible:BindableUserControl>

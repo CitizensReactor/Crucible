@@ -1,0 +1,58 @@
+﻿<local:DatabaseFieldEditorBase x:Class="DataCoreBinary2.DatabaseFieldEditors.DatabaseEnumField" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DataCoreBinary2.DatabaseFieldEditors"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="28" 
+             d:DesignWidth="780">
+    <UserControl.Resources>
+        <local:EnumToArrayConverter x:Key="EnumToArrayConverter"/>
+    </UserControl.Resources>
+    <Border Padding="{StaticResource FieldEditor_Generic_Property_Padding}">
+        <Grid>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                x:Name="lblEnumName" 
+                Text="{Binding PropertyName, FallbackValue='property_name'}"
+                ToolTip="{Binding PropertyName}" 
+                Width="180" 
+                VerticalAlignment="Center" 
+                Margin="0,0,0,0"
+                TextTrimming="CharacterEllipsis" />
+                <ComboBox 
+                    x:Name="cbEnumOptions"
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center" 
+                    Margin="20,0,0,0" 
+                    Width="250"
+                    ItemsSource="{Binding Converter={StaticResource EnumToArrayConverter}}"
+                    SelectedIndex="{Binding Value}"
+                          >
+                    <ComboBox.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type system:String}">
+                            <Grid>
+                                <TextBlock Text="{Binding}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel VirtualizingStackPanel.IsVirtualizing="True"
+						                        VirtualizingStackPanel.VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </ComboBox.ItemsPanel>
+                </ComboBox>
+                <TextBlock 
+                x:Name="lblType" 
+                Text="{Binding PropertyTypeName, FallbackValue='variable_type'}" 
+                VerticalAlignment="Center" 
+                Width="150" 
+                Margin="20,0,0,0" />
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</local:DatabaseFieldEditorBase>

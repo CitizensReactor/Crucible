@@ -1,0 +1,56 @@
+﻿<Window x:Class="Crucible.AboutWindow" x:ClassModifier="internal"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Crucible"
+    mc:Ignorable="d"
+    SnapsToDevicePixels="True"
+    WindowStyle="None"
+    ResizeMode="NoResize" 
+    FontFamily="Tahoma"
+    Title="About"
+    WindowStartupLocation="CenterScreen"
+    Height="230"
+    Width="600">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5"/>
+    </WindowChrome.WindowChrome>
+    <Border Margin="0" BorderThickness="1" BorderBrush="{StaticResource Editor_Accent}" Background="{StaticResource Editor_Dark_Background}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="34"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" MouseDown="Titlebar_MouseDown" Background="{StaticResource Editor_Dark_Background}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button x:Name="btnMinimize" Click="Minimize_Click" Style="{StaticResource MinimizeButton}"/>
+                    <!--<Button x:Name="btnMaximize" Click="MaximizeToggle_Click" Style="{StaticResource MaximizeButton}" Visibility="{Binding WindowState, RelativeSource={RelativeSource AncestorType=local:BindableWindow}, Converter={StaticResource MaximizedToInvisibility}}"/>
+                    <Button x:Name="btnRestore" Click="MaximizeToggle_Click" Style="{StaticResource RestoreButton}" Visibility="{Binding WindowState, RelativeSource={RelativeSource AncestorType=local:BindableWindow}, Converter={StaticResource MaximizedToVisibility}}"/>-->
+                    <Button x:Name="btnClose" Click="Close_Click" Style="{StaticResource CloseButton}"/>
+                </StackPanel>
+                <TextBlock Margin="8,9" IsHitTestVisible="False" Foreground="{StaticResource Editor_Dark_Foreground}">
+                <Run Text="About Crucible"/>
+                </TextBlock>
+            </Grid>
+            <StackPanel Grid.Row="1" Margin="2">
+                <Grid Background="{StaticResource Editor_Accent}" Margin="20">
+                    <StackPanel Orientation="Horizontal" Margin="30, 20">
+                        <Image Source="crucible.ico" Width="64" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <StackPanel Margin="20,0,0,0">
+                            <TextBlock>
+                                <Span FontSize="30" Foreground="{StaticResource Editor_Light_Foreground}">Crucible</Span><LineBreak/>
+                                <Span FontSize="15" Foreground="{StaticResource Editor_Medium_Foreground}">Created by Unknown44</Span>
+                                <Span FontSize="10" Foreground="{StaticResource Editor_Dark_Foreground}"></Span>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+                <StackPanel>
+                    <TextBlock Foreground="{StaticResource Editor_Dark_Foreground}" TextAlignment="Center" Text="Maybe someday I can work on this game for real?"/>
+                    <TextBlock Foreground="{StaticResource Editor_Dark_Foreground}" TextAlignment="Center" FontSize="10" Text="70dc06436a0a6ded439731db07e3b69c"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

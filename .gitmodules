@@ -1,0 +1,9 @@
+[submodule "zstd"]
+	path = zstd
+	url = https://github.com/facebook/zstd.git
+[submodule "DirectXTex"]
+	path = DirectXTex
+	url = https://github.com/Microsoft/DirectXTex.git
+[submodule "SharpDevelop"]
+	path = SharpDevelop
+	url = https://github.com/icsharpcode/SharpDevelop.git

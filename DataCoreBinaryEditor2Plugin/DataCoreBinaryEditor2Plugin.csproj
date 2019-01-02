@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{46FD1690-F9FB-41B8-A3FA-036D4696BDD7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DataCoreBinary2</RootNamespace>
+    <AssemblyName>DataCoreBinary2.Plugin</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DatabaseFile.xaml.cs">
+      <DependentUpon>DatabaseFile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseRecordSearchResult.cs" />
+    <Compile Include="DatabaseRecordTreeViewItem.cs" />
+    <Compile Include="DataCore2\ConversionType.cs" />
+    <Compile Include="DataCore2\CustomBinaryWriter.cs" />
+    <Compile Include="DataCore2\DataCoreRecord.cs" />
+    <Compile Include="DataCore2\DataCore2Util.cs" />
+    <Compile Include="DataCore2\DataCoreBinary.cs" />
+    <Compile Include="DataCore2\DataCoreCollection.cs" />
+    <Compile Include="DataCore2\DataCoreCompiler.cs" />
+    <Compile Include="DataCore2\DataCoreDatabase.cs" />
+    <Compile Include="DataCore2\DataCoreDatabase.TypeGeneration.cs" />
+    <Compile Include="DataCore2\DataCoreLocale.cs" />
+    <Compile Include="DataCore2\DataCorePointer.cs" />
+    <Compile Include="DataCore2\DataCoreString.cs" />
+    <Compile Include="DataCore2\DataCoreStrongPointer.cs" />
+    <Compile Include="DataCore2\DataCoreWeakPointer.cs" />
+    <Compile Include="DataCore2\DataType.cs" />
+    <Compile Include="DataCore2\IDataCorePointer.cs" />
+    <Compile Include="DataCore2\IDataCoreStructure.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\DataCoreStructureBase.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\EnumValueCreationInfo.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\ArrayFixupBase.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\ClassArrayFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\FixupBase.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\ReferenceArrayFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\ReferenceFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\StrongPointerArrayFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\StrongPointerFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\WeakPointerArrayFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\Fixups\WeakPointerFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\IClassFixup.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\PropertyCreationInfo.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\StaticTypeBuilder.cs" />
+    <Compile Include="DataCore2\ManagedTypeConstruction\UnderlyingTypeAttribute.cs" />
+    <Compile Include="DataCore2\Structures\RawArrayPointer.cs" />
+    <Compile Include="DataCore2\Structures\RawDataMapping.cs" />
+    <Compile Include="DataCore2\Structures\RawEnum.cs" />
+    <Compile Include="DataCore2\Structures\RawHeader.cs" />
+    <Compile Include="DataCore2\Structures\RawPointer.cs" />
+    <Compile Include="DataCore2\Structures\RawProperty.cs" />
+    <Compile Include="DataCore2\Structures\RawRecord.cs" />
+    <Compile Include="DataCore2\Structures\RawReference.cs" />
+    <Compile Include="DataCore2\Structures\RawStringReference.cs" />
+    <Compile Include="DataCore2\Structures\RawStructure.cs" />
+    <Compile Include="DataCore2\TextBlock.cs" />
+    <Compile Include="DataCoreBinaryEditor2PluginSettings.cs" />
+    <Compile Include="FieldEditors\AllTrue.cs" />
+    <Compile Include="FieldEditors\DatabaseArrayField.xaml.cs">
+      <DependentUpon>DatabaseArrayField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabaseBoolField.xaml.cs">
+      <DependentUpon>DatabaseBoolField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabaseClassField.xaml.cs">
+      <DependentUpon>DatabaseClassField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabaseEnumField.xaml.cs">
+      <DependentUpon>DatabaseEnumField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabaseNumberField.xaml.cs">
+      <DependentUpon>DatabaseNumberField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabaseReferenceField.xaml.cs">
+      <DependentUpon>DatabaseReferenceField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabaseStringField.xaml.cs">
+      <DependentUpon>DatabaseStringField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabasePointerField.xaml.cs">
+      <DependentUpon>DatabasePointerField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\DatabaseStructureView.xaml.cs">
+      <DependentUpon>DatabaseStructureView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\ErrorField.xaml.cs">
+      <DependentUpon>ErrorField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\UnsupportedField.xaml.cs">
+      <DependentUpon>UnsupportedField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FieldEditors\_DatabaseFieldEditorBase.cs" />
+    <Compile Include="DataCoreBinaryEditor2Plugin.cs" />
+    <Compile Include="PointerCreationTypeSelectionWindow.xaml.cs">
+      <DependentUpon>PointerCreationTypeSelectionWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Binary\Binary.csproj">
+      <Project>{49F740EB-394E-4F15-8289-F010FA91B9A6}</Project>
+      <Name>Binary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crucible\Crucible.csproj">
+      <Project>{2154c105-bfc8-49e3-b4b6-7751156c46cf}</Project>
+      <Name>Crucible</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\WindowsAPICodePack\Shell\Shell.csproj">
+      <Project>{aa0c00cb-8699-4f37-bfae-40ca87acc06d}</Project>
+      <Name>Shell</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Costura, Version=3.2.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.3.2.0\lib\net46\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DatabaseFile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseArrayField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseBoolField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseClassField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseEnumField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseNumberField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseReferenceField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseStringField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabasePointerField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\DatabaseStructureView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\ErrorField.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FieldEditors\UnsupportedField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PointerCreationTypeSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.2\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.3.3.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.3.2\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props'))" />
+  </Target>
+</Project>

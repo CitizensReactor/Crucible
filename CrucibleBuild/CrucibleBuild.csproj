@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0AD1D9EE-C6C6-4B8F-9728-51988C887346}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CrucibleBuild</RootNamespace>
+    <AssemblyName>CrucibleBuildArtifact</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CrucibleBuild.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>del $(TargetPath)
+del $(TargetDir)$(TargetName).pdb
+
+echo C++ Plugins
+xcopy $(SolutionDir)x64\$(ConfigurationName)\P4KEncryption.Plugin.dll $(TargetDir)Plugins\ /Y /Q
+
+echo Crucible
+xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\Crucible.exe.config $(TargetDir) /Y /Q
+xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\*.dll $(TargetDir) /Y /Q
+xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\*.exe $(TargetDir) /Y /Q
+
+echo TextEditorPlugin
+xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\*.dll $(TargetDir)Plugins\ /Y /Q
+xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.pak $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
+xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.dll $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
+xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.dat $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
+xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.exe $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
+xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.bin $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
+
+echo DataCoreBinary2Plugin
+xcopy $(SolutionDir)DataCoreBinaryEditor2Plugin\bin\x64\$(ConfigurationName)\*.dll $(TargetDir)Plugins\ /Y /Q
+
+if defined AppVeyor (
+    if $(ConfigurationName) == Release (
+        echo Zipping with 7z
+        7z a -t7z -mx9 -r ./crucible.7z *
+        7z a -tzip -mx9 -r ./crucible.zip *
+    )
+)
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if $(ConfigurationName) == Release (
+    rem del /S /Q $(TargetDir)*
+    rem FOR /D %25%25p IN ("$(TargetDir)*.*") DO rmdir "%25%25p" /s /q
+)
+</PreBuildEvent>
+  </PropertyGroup>
+</Project>

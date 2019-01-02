@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="DataCoreBinary2.DatabaseFile" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Crucible"
+             xmlns:sidebar="clr-namespace:DataCoreBinary2.Sidebar"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <TabControl x:Name="Tabs">
+            <TabItem Header="Database">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0">
+                        <!--<TextBox x:Name="databaseRecordsSearchBar" TextChanged="databaseRecordsSearchBar_TextChanged" Height="24"/>-->
+                        <xctk:WatermarkTextBox x:Name="databaseRecordsSearchBar" Watermark="Search" TextChanged="databaseRecordsSearchBar_TextChanged" Height="24"/>
+                    </StackPanel>
+                    <Grid Grid.Row="1">
+                        <DataGrid 
+                            x:Name="databaseRecordsSearchResults"
+                            EnableRowVirtualization="True"
+                            RowDetailsVisibilityMode="VisibleWhenSelected"
+                            DockPanel.Dock="Top"
+                            Visibility="{Binding ElementName=databaseRecordsSearchBar, Path=Text, Converter={StaticResource StringNullOrWhitespaceToInvisibility}}"
+                            VirtualizingStackPanel.IsVirtualizing="True"
+                            VirtualizingStackPanel.VirtualizationMode="Recycling"
+                            AutoGenerateColumns="False"
+                            HeadersVisibility="Column">
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="{StaticResource Editor_Medium_Background}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}" />
+                                    <Setter Property="Padding" Value="3,4"/>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <Setter Property="Background" Value="{StaticResource Editor_Dark_Background}"/>
+                                    <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}" />
+                                    <Setter Property="Padding" Value="2,3"/>
+                                    <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+                                </Style>
+                            </DataGrid.RowStyle>
+                            <!--<DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <Setter Property="Visibility" Value="{Binding Path=IsEnabled, Converter={StaticResource BoolToVisibility}}"/>
+                                </Style>
+                            </DataGrid.RowStyle>-->
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Name" Width="SizeToCells" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ContentControl MouseDoubleClick="ContentControl_MouseDoubleClick">
+                                                <TextBlock Text="{Binding Title}" Margin="2,1"/>
+                                            </ContentControl>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Type" Width="SizeToCells" IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ContentControl MouseDoubleClick="ContentControl_MouseDoubleClick">
+                                                <TextBlock Text="{Binding StructureName}" Margin="2,1"/>
+                                            </ContentControl>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TreeView 
+                                    Name="databaseRecordsTreeView"
+                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                    Visibility="{Binding ElementName=databaseRecordsSearchBar, Path=Text, Converter={StaticResource StringNullOrWhitespaceToVisibility}}">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="{x:Type sidebar:DatabaseRecordTreeViewItem}" ItemsSource="{Binding Items}">
+                                    <ContentControl MouseDoubleClick="ContentControl_MouseDoubleClick">
+                                        <StackPanel Orientation="Horizontal" Height="20">
+                                            <TextBlock Height="16px" Text="{Binding Title}" VerticalAlignment="Center" Margin="4,0" />
+                                        </StackPanel>
+                                    </ContentControl>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button Width="50" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Content="Save" Click="Temporary_Save_Button"/>
+    </Grid>
+</UserControl>

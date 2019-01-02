@@ -1,0 +1,20 @@
+﻿<local:DatabaseFieldEditorBase x:Class="DataCoreBinary2.DatabaseFieldEditors.DatabaseClassField" x:ClassModifier="internal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DataCoreBinary2.DatabaseFieldEditors"
+             mc:Ignorable="d" 
+             d:DesignWidth="780"
+             d:DesignHeight="480">
+    <Border Margin="0,2" BorderThickness="1" BorderBrush="#20000000" Background="{StaticResource FieldEditor_Layer2}">
+        <StackPanel Orientation="Vertical" Margin="{StaticResource FieldEditor_Container_Property_Padding}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding PropertyTypeName}"/>
+                <TextBlock Text=" "/>
+                <TextBlock Text="{Binding PropertyName}"/>
+            </StackPanel>
+            <StackPanel Name="Root" />
+        </StackPanel>
+    </Border>
+</local:DatabaseFieldEditorBase>
