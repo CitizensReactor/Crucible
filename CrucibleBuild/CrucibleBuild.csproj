@@ -51,9 +51,6 @@
     <PostBuildEvent>del $(TargetPath)
 del $(TargetDir)$(TargetName).pdb
 
-echo C++ Plugins
-xcopy $(SolutionDir)x64\$(ConfigurationName)\P4KEncryption.Plugin.dll $(TargetDir)Plugins\ /Y /Q
-
 echo Crucible
 xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\Crucible.exe.config $(TargetDir) /Y /Q
 xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\*.dll $(TargetDir) /Y /Q
