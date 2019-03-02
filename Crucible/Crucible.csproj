@@ -316,7 +316,7 @@ del $(TargetDir)Microsoft.WindowsAPICodePack.xml
     <PreBuildEvent>if exist "$(SolutionDir)SharpDevelop\bin\ICSharpCode.TreeView.dll" (
     echo "SharpDevelop TreeView exists"
 ) else (
-    "$(MSBuildBinPath)\msbuild.exe" /verbosity:minimal /p:Configuration=$(Configuration) /nologo /noconsolelogger "$(SolutionDir)SharpDevelop\src\Libraries\SharpTreeView\ICSharpCode.TreeView\ICSharpCode.TreeView.csproj" /p:Configuration=$(Configuration)
+    "$(MSBuildBinPath)\msbuild.exe" "$(SolutionDir)SharpDevelop\src\Libraries\SharpTreeView\ICSharpCode.TreeView\ICSharpCode.TreeView.csproj" /verbosity:minimal /p:Configuration=$(Configuration) /nologo /noconsolelogger
 )
 </PreBuildEvent>
   </PropertyGroup>
