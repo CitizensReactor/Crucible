@@ -4,12 +4,12 @@
                     xmlns:controls="http://schemas.microsoft.com/netfx/2007/xaml/presentation"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:local="clr-namespace:Crucible">
-
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Brushes.xaml"/>
         <ResourceDictionary Source="Scroll.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
+    <ValueConverter:ValidDate x:Key="ValidDate"/>
     <ValueConverter:FilesystemTreeViewItemToIconConverter x:Key="FilesystemTreeViewItemToIconConverter" />
     <ValueConverter:DatabaseMenuItemToIconConverter x:Key="DatabaseMenuItemToIconConverter" />
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />

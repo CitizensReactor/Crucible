@@ -100,7 +100,7 @@ namespace P4KLib
                 var offset_central_directory_locator_offset = offset_central_directory_end - 0x14;
                 central_directory_locator_offset = ReadPK(fileStream, customBinaryReader, offset_central_directory_locator_offset) as CentralDirectoryLocatorOffset;
 
-                var offset_central_directory_locator = central_directory_locator_offset.directory_locator_offset;
+                var offset_central_directory_locator = central_directory_locator_offset.DirectoryLocatorOffset;
                 central_directory_locator = ReadPK(fileStream, customBinaryReader, offset_central_directory_locator) as CentralDirectoryLocator;
 
                 PopulateDirectory(fileStream, customBinaryReader, central_directory_locator);
@@ -115,17 +115,17 @@ namespace P4KLib
 
         public void WriteContentDirectoryChunk(FileStream stream, CustomBinaryReader reader, CustomBinaryWriter writer)
         {
-            stream.Position = central_directory_locator.content_directory_offset;
+            stream.Position = central_directory_locator.ContentDirectoryOffset;
 
             var cd_chunk = CreateCentralDirectoryChunk();
 
             writer.Write(cd_chunk);
 
-            central_directory_locator.content_dictionary_size = cd_chunk.Length;
-            central_directory_locator.content_dictionary_count = Files.Count;
-            central_directory_locator.content_dictionary_count2 = Files.Count;
+            central_directory_locator.ContentDictionarySize = cd_chunk.Length;
+            central_directory_locator.DontentDictionaryCount = Files.Count;
+            central_directory_locator.ContentDictionaryCount2 = Files.Count;
 
-            central_directory_locator_offset.directory_locator_offset = stream.Position;
+            central_directory_locator_offset.DirectoryLocatorOffset = stream.Position;
             byte[] locator_bytes = this.central_directory_locator.CreateBinaryData(true);
             byte[] locator_offset_bytes = this.central_directory_locator_offset.CreateBinaryData(true);
             byte[] cd_end_bytes = this.central_directory_end.CreateBinaryData(true);
@@ -143,7 +143,7 @@ namespace P4KLib
             byte fill = 0
             )
         {
-            var current_offset = central_directory_locator.content_directory_offset;
+            var current_offset = central_directory_locator.ContentDirectoryOffset;
 
             long total_allocation = 0;
 
@@ -195,7 +195,7 @@ namespace P4KLib
                 stream.WriteByte(fill);
             }
 
-            central_directory_locator.content_directory_offset += total_allocation;
+            central_directory_locator.ContentDirectoryOffset += total_allocation;
 
             if(regenerate_content_directory)
             {
@@ -240,18 +240,18 @@ namespace P4KLib
 
         void PopulateDirectory(FileStream stream, CustomBinaryReader reader, CentralDirectoryLocator central_directory_locator)
         {
-            long central_directory_base_offset = central_directory_locator.content_directory_offset;
+            long central_directory_base_offset = central_directory_locator.ContentDirectoryOffset;
 
             stream.Position = central_directory_base_offset;
-            byte[] central_directory_data = reader.ReadBytes(central_directory_locator.content_dictionary_size);
+            byte[] central_directory_data = reader.ReadBytes(central_directory_locator.ContentDictionarySize);
             using (MemoryStream central_directory_stream = new MemoryStream(central_directory_data))
             using (CustomBinaryReader central_directory_reader = new CustomBinaryReader(central_directory_stream))
             {
                 // rebase current offset to 0 because we've copied data to a relative stream
                 long central_directory_current_offset = 0;
 
-                content_dictionary_count = central_directory_locator.content_dictionary_count;
-                for (int i = 0; i < central_directory_locator.content_dictionary_count; i++)
+                content_dictionary_count = central_directory_locator.DontentDictionaryCount;
+                for (int i = 0; i < central_directory_locator.DontentDictionaryCount; i++)
                 {
                     var central_directory = ReadPK(central_directory_stream, central_directory_reader, central_directory_current_offset) as CentralDirectory;
                     central_directory_current_offset = central_directory_stream.Position;
@@ -259,7 +259,7 @@ namespace P4KLib
                     //TODO async query
                     //var file_structure = ReadPK(stream, reader, central_directory.extra.data_offset) as FileStructure;
 
-                    Files[central_directory.filename] = new P4KFile(this, central_directory);
+                    Files[central_directory.Filename] = new P4KFile(this, central_directory);
 
                     //var file_data = ReadDataFromFileSection(stream, reader, file_offset.extra.file_data_offset, file_offset.extra.file_data_length);
 
@@ -294,15 +294,15 @@ namespace P4KLib
 
                     CentralDirectory centralDirectory = new CentralDirectory(stream, reader);
 
-                    if (Logging) Console.WriteLine($"Found CentralDirectory {centralDirectory.filename}");
-                    if (Logging) Console.WriteLine($"Searching for FileStructure @{centralDirectory.extra.data_offset.ToString("X")}");
+                    if (Logging) Console.WriteLine($"Found CentralDirectory {centralDirectory.Filename}");
+                    if (Logging) Console.WriteLine($"Searching for FileStructure @{centralDirectory.Extra.data_offset.ToString("X")}");
 
                     return centralDirectory;
                 case Signature.FileStructure:
 
                     FileStructure fileStructure = new FileStructure(stream, reader);
 
-                    if (Logging) Console.WriteLine($"Found FileStructure {fileStructure.filename}");
+                    if (Logging) Console.WriteLine($"Found FileStructure {fileStructure.Filename}");
 
 
                     return fileStructure;
@@ -403,7 +403,7 @@ namespace P4KLib
             if (!Files.ContainsValue(file))
             {
                 file.centralDirectory = new CentralDirectory(filename, data);
-                file.fileStructure = new FileStructure(filename, data);
+                file.FileStructure = new FileStructure(filename, data);
 
                 // Add this first otherwise the Locator count wont be correct
                 Files[file.Filepath] = file;
@@ -415,24 +415,24 @@ namespace P4KLib
                     false
                     );
 
-                file.centralDirectory.extra.data_offset = allocation_offset;
+                file.centralDirectory.Extra.data_offset = allocation_offset;
                 var crypt = new SHA256Managed();
-                file.centralDirectory.extra.sha256_hash = crypt.ComputeHash(data);
+                file.centralDirectory.Extra.sha256_hash = crypt.ComputeHash(data);
 
                 var mutex = this.GetStream(out FileStream stream, out CustomBinaryReader reader, out CustomBinaryWriter writer);
 
                 // these are the same for some reason... weird
-                file.fileStructure.extra.data_offset = file.centralDirectory.extra.data_offset;
+                file.FileStructure.Extra.DataOffset = file.centralDirectory.Extra.data_offset;
 
                 // write fileinfo
                 stream.Position = allocation_offset;
-                file.fileStructure.WriteBinaryToStream(stream, writer, true);
+                file.FileStructure.WriteBinaryToStream(stream, writer, true);
 
                 // not actually part of the structure, just a useful helper to get the data as its
                 // immediately after this structure
-                file.fileStructure.extra.file_data_offset = stream.Position;
-                file.centralDirectory.extra.compressed_file_length = file.fileStructure.extra.compressed_file_length;
-                file.centralDirectory.extra.uncompressed_file_length = file.fileStructure.extra.uncompressed_file_length;
+                file.FileStructure.Extra.FileDataOffset = stream.Position;
+                file.centralDirectory.Extra.compressed_file_length = file.FileStructure.Extra.CompressedFileLength;
+                file.centralDirectory.Extra.uncompressed_file_length = file.FileStructure.Extra.UncompressedFileLength;
 
                 writer.Write(data);
 

@@ -210,6 +210,24 @@ namespace Crucible
                 return;
             }
 
+            ReadPerforceInformation();
+            if (Perforce.HasValue)
+            {
+                const Int64 minSupportedChangelist = 0;
+                const Int64 maxSupportedChangelist = 1179321;
+
+                bool isVersionUnsupported = false;
+                isVersionUnsupported |= Perforce.Value.RequestedP4ChangeNum < minSupportedChangelist;
+                isVersionUnsupported |= Perforce.Value.RequestedP4ChangeNum > maxSupportedChangelist;
+
+                if (isVersionUnsupported)
+                {
+                    this.SetStatusInternal("Game version is unsupported", 10);
+                    CloseStarcitizen();
+                    return;
+                }
+            }
+
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
             {
                 this.P4KFilesystemTab.Content = new FilesystemView(FilesystemManager.P4KFilesystem);
@@ -240,6 +258,61 @@ namespace Crucible
             return;
         }
 
+        private struct P4Information
+        {
+            public string Branch;
+            public string BuildDateStamp;
+            public string BuildTimeStamp;
+            public string Config;
+            public Int64 RequestedP4ChangeNum;
+            public string Shelved_Change;
+            public string Tag;
+        }
+        P4Information? Perforce = null;
+
+        void ReadPerforceInformation()
+        {
+            Perforce = null;
+
+            if (FilesystemManager != null)
+            {
+                // attempt to find a release id
+                byte[] data = null;
+                data = data ?? FilesystemManager?.LocalFilesystem["f_win_game_client_release.id"]?.GetData();
+                data = data ?? FilesystemManager?.P4KFilesystem["c_win_shader.id"]?.GetData();
+                data = data ?? FilesystemManager?.LocalFilesystem["c_tools_crash_handler.id"]?.GetData();
+
+                if (data != null)
+                {
+                    var perforceInformation = new P4Information();
+
+                    var jsonText = Encoding.UTF8.GetString(data);
+                    JsonValue jsonRoot = JsonValue.Parse(jsonText);
+                    JsonValue jsonData = jsonRoot.ContainsKey("Data") ? jsonRoot["Data"] : null;
+
+                    perforceInformation.Branch = (string)((jsonData?.ContainsKey("Branch") ?? false) ? jsonData["Branch"] : null);
+                    perforceInformation.BuildDateStamp = (string)((jsonData?.ContainsKey("BuildDateStamp") ?? false) ? jsonData["BuildDateStamp"] : null);
+                    perforceInformation.BuildTimeStamp = (string)((jsonData?.ContainsKey("BuildTimeStamp") ?? false) ? jsonData["BuildTimeStamp"] : null);
+                    perforceInformation.Config = (string)((jsonData?.ContainsKey("Config") ?? false) ? jsonData["Config"] : null);
+                    perforceInformation.Shelved_Change = (string)((jsonData?.ContainsKey("Shelved_Change") ?? false) ? jsonData["Shelved_Change"] : null);
+                    perforceInformation.Tag = (string)((jsonData?.ContainsKey("Tag") ?? false) ? jsonData["Tag"] : null);
+
+                    var requestedP4ChangeNumStr = (string)((jsonData?.ContainsKey("RequestedP4ChangeNum") ?? false) ? jsonData["RequestedP4ChangeNum"] : null);
+
+                    if (Int64.TryParse(requestedP4ChangeNumStr, out Int64 requestedP4ChangeNum))
+                    {
+                        perforceInformation.RequestedP4ChangeNum = requestedP4ChangeNum;
+                    }
+                    else
+                    {
+                        perforceInformation.RequestedP4ChangeNum = 0;
+                    }
+
+                    Perforce = perforceInformation;
+                }
+            }
+        }
+
         internal void SetTitle(string text = "")
         {
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
@@ -253,58 +326,20 @@ namespace Crucible
 
                 if (FilesystemManager != null)
                 {
-                    // attempt to find a release id
-                    byte[] data = null;
-                    data = data ?? FilesystemManager?.LocalFilesystem["f_win_game_client_release.id"]?.GetData();
-                    data = data ?? FilesystemManager?.P4KFilesystem["c_win_shader.id"]?.GetData();
-                    data = data ?? FilesystemManager?.LocalFilesystem["c_tools_crash_handler.id"]?.GetData();
+                    builder.Append($" | StarCitizen");
 
-                    if (data != null)
+                    string versionStr = null;
+                    if (Perforce.HasValue)
                     {
-                        builder.Append($" | StarCitizen");
-
-                        var jsonText = Encoding.UTF8.GetString(data);
-                        JsonValue jsonRoot = JsonValue.Parse(jsonText);
-                        JsonValue jsonData = jsonRoot.ContainsKey("Data") ? jsonRoot["Data"] : null;
-
-                        string versionStr = null;
-                        var branchStr = (string)((jsonData?.ContainsKey("Branch") ?? false) ? jsonData["Branch"] : null);
-                        if (branchStr != null)
-                        {
-                            var split0 = branchStr.Split('-');
-                            if (split0.Length > 1)
-                            {
-                                var split1 = split0[split0.Length - 1].Split('.');
-                                if (split1.Length >= 2)
-                                {
-                                    var majorVersionResult = int.TryParse(split1[0], out int majorVersion);
-                                    var minorVersionResult = int.TryParse(split1[1], out int minorVersion);
-                                    if (majorVersionResult && minorVersionResult)
-                                    {
-                                        versionStr = $"{majorVersion}.{minorVersion}";
-                                    }
-                                }
-                            }
-                        }
-                        if (versionStr != null)
-                        {
-                            builder.Append($" {versionStr}");
-                        }
-                        else
-                        {
-                            builder.Append($" {FilesystemManager.MajorVersion}.{FilesystemManager.MinorVersion}");
-                        }
-
-                        var requestedP4ChangeNumStr = (string)((jsonData?.ContainsKey("RequestedP4ChangeNum") ?? false) ? jsonData["RequestedP4ChangeNum"] : null);
-                        int requestedP4ChangeNum = -1;
-                        if (int.TryParse(requestedP4ChangeNumStr, out requestedP4ChangeNum))
-                        {
-                            builder.Append($" {requestedP4ChangeNum}");
-                        }
+                        versionStr += $" {Perforce.Value.Branch} {Perforce.Value.RequestedP4ChangeNum}";
+                    }
+                    if (versionStr != null)
+                    {
+                        builder.Append($" {versionStr}");
                     }
                     else
                     {
-                        builder.Append($" | StarCitizen {FilesystemManager.MajorVersion}.{FilesystemManager.MinorVersion}");
+                        builder.Append($" {FilesystemManager.MajorVersion}.{FilesystemManager.MinorVersion}");
                     }
                 }
 
@@ -329,7 +364,17 @@ namespace Crucible
             PrimaryWindow?.SetStatusInternal(text, value, max_value, time);
         }
 
-        private void SetStatusInternal(string text = null, int value = 0, int max_value = 0)
+        private void SetStatusInternal(string text)
+        {
+            SetStatusInternal(text, -1, -1, 3);
+        }
+
+        private void SetStatusInternal(string text, int time)
+        {
+            SetStatusInternal(text, -1, -1, time);
+        }
+
+        private void SetStatusInternal(string text, int value, int max_value)
         {
             SetStatusInternal(text, value, max_value, 3);
         }

@@ -100,22 +100,36 @@ namespace Crucible.Filesystem
             return filesystemTreeViewRoot;
         }
 
-        private void filesystemTreeView_LeftMouseDoubleClick(object _sender, MouseButtonEventArgs e)
+        private void OpenFilesystemEntry(IFilesystemEntry filesystemEntry)
         {
-            if (e.LeftButton != MouseButtonState.Pressed) return;
-            TreeViewItem treeViewItem = _sender as TreeViewItem;
-            if (treeViewItem == null) return;
-
-            var filesystemEntry = treeViewItem.DataContext as IFilesystemEntry;
-            if (filesystemEntry == null) return;
-
             if (filesystemEntry.IsDirectory) return;
             else
             {
-                e.Handled = true;
-
                 MainWindow.PrimaryWindow.OpenFileTab(filesystemEntry);
             }
+        }
+
+
+        private void FilesystemItemDoubleClick(object _sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed) return;
+            FrameworkElement frameworkElement = _sender as FrameworkElement;
+            if (frameworkElement == null) return;
+            if (frameworkElement.DataContext == null) return;
+
+            switch (frameworkElement.DataContext)
+            {
+                case IFilesystemEntry filesystemEntry:
+                    OpenFilesystemEntry(filesystemEntry);
+                    break;
+                case SharpDevelopFilesystemNode filesystemNode:
+                    OpenFilesystemEntry(filesystemNode.FilesystemEntry);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            e.Handled = true;
         }
 
         private void FileContextMenu_Click_Open(object _sender, RoutedEventArgs e)

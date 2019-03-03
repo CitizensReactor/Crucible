@@ -40,6 +40,7 @@ namespace Crucible.Filesystem
         public int BuildVersion { get; internal set; }
         public string DirectoryName { get; internal set; }
 
+
         public VirtualFilesystemManager(string localDirectory)
         {
             this.DirectoryName = localDirectory;
@@ -98,11 +99,6 @@ namespace Crucible.Filesystem
             catch (Exception)
             {
                 throw new Exception("Failed to parse version information");
-            }
-
-            if (!validVersion)
-            {
-                throw new Exception("Invalid game version");
             }
 
             LocalFilesystem = new LocalVirtualFilesystem(this, DirectoryName);

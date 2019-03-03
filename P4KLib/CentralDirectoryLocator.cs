@@ -15,13 +15,13 @@ namespace P4KLib
         private short unknownD;
         private int unknownE;
         private int unknownF;
-        public int content_dictionary_count;
+        public int DontentDictionaryCount;
         private int unknownG;
-        public int content_dictionary_count2;
+        public int ContentDictionaryCount2;
         private int unknownH;
-        public int content_dictionary_size;
+        public int ContentDictionarySize;
         private int unknownI;
-        public long content_directory_offset;
+        public long ContentDirectoryOffset;
 
         public CentralDirectoryLocator(Stream stream, CustomBinaryReader reader)
         {
@@ -31,13 +31,13 @@ namespace P4KLib
             unknownD = reader.ReadInt16();
             unknownE = reader.ReadInt32();
             unknownF = reader.ReadInt32();
-            content_dictionary_count = reader.ReadInt32();
+            DontentDictionaryCount = reader.ReadInt32();
             unknownG = reader.ReadInt32();
-            content_dictionary_count2 = reader.ReadInt32();
+            ContentDictionaryCount2 = reader.ReadInt32();
             unknownH = reader.ReadInt32();
-            content_dictionary_size = reader.ReadInt32();
+            ContentDictionarySize = reader.ReadInt32();
             unknownI = reader.ReadInt32();
-            content_directory_offset = reader.ReadInt64();
+            ContentDirectoryOffset = reader.ReadInt64();
         }
 
         public byte[] CreateBinaryData(bool header)
@@ -67,13 +67,13 @@ namespace P4KLib
             writer.Write(unknownD);
             writer.Write(unknownE);
             writer.Write(unknownF);
-            writer.Write(content_dictionary_count);
+            writer.Write(DontentDictionaryCount);
             writer.Write(unknownG);
-            writer.Write(content_dictionary_count2);
+            writer.Write(ContentDictionaryCount2);
             writer.Write(unknownH);
-            writer.Write(content_dictionary_size);
+            writer.Write(ContentDictionarySize);
             writer.Write(unknownI);
-            writer.Write(content_directory_offset);
+            writer.Write(ContentDirectoryOffset);
         }
     }
 }

@@ -15,17 +15,44 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <sd:SharpTreeView x:Name="treeView2"
                               AllowDrop="True"
                               ShowAlternation="True"
-                              Grid.Column="1">
+                              Grid.Column="1"
+                              BorderThickness="0"
+                              Background="Transparent"
+                              Foreground="{StaticResource Editor_Medium_Foreground}">
+                <sd:SharpTreeView.Resources>
+                    <Style TargetType="GridViewColumnHeader">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" Value="Red"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </sd:SharpTreeView.Resources>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                                <Setter Property="Background" Value="#06FFFFFF" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <EventSetter Event="MouseDoubleClick" Handler="FilesystemItemDoubleClick"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.View>
                     <sd:SharpGridView>
                         <GridView.Columns>
-                            <GridViewColumn>
+                            <GridViewColumn Header="Name">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <sd:SharpTreeNodeView />
@@ -42,7 +69,13 @@
                             <GridViewColumn Header="Date modified">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding FileModified, StringFormat=g}" />
+                                        <TextBlock Text="{Binding FileModified, StringFormat=g}">
+                                            <TextBlock.Visibility>
+                                                <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                                    <Binding Path="FileModified" Converter="{StaticResource ValidDate}"/>
+                                                </MultiBinding>
+                                            </TextBlock.Visibility>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -56,7 +89,7 @@
                             <GridViewColumn Header="Size" Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Background="Red" HorizontalAlignment="Stretch" Text="{Binding FileSizeStr}" TextAlignment="Right">
+                                        <TextBlock TextAlignment="Right" Text="{Binding FileSizeStr}">
                                             <TextBlock.Visibility>
                                                 <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
                                                     <Binding Path="FilesystemEntry.IsDirectory" Converter="{StaticResource InvertBoolean}"/>
@@ -73,6 +106,7 @@
             </sd:SharpTreeView>
         </Grid>
         <TreeView
+            Visibility="Collapsed"
             Grid.Row="1"
             Name="filesystemTreeView"
             VirtualizingStackPanel.IsVirtualizing="True"
@@ -81,7 +115,7 @@
             ItemsSource="{Binding Items}">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource FilesystemTreeViewItem}">
-                    <EventSetter Event="MouseDoubleClick" Handler="filesystemTreeView_LeftMouseDoubleClick" />
+                    <EventSetter Event="MouseDoubleClick" Handler="FilesystemItemDoubleClick" />
                     <EventSetter Event="MouseLeave" Handler="TreeViewItem_MouseMove"/>
                     <EventSetter Event="MouseEnter" Handler="TreeViewItem_MouseMove"/>
                     <EventSetter Event="Expanded" Handler="TreeViewItem_Expanded" />

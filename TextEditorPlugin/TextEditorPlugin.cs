@@ -34,6 +34,8 @@ namespace TextEditor
             CrucibleApplication.RegisterFileUI(FileType.Lua, CreateTextFileTab);
             CrucibleApplication.RegisterFileUI(FileType.JSON, CreateTextFileTab);
             CrucibleApplication.RegisterFileUI(FileType.INI, CreateTextFileTab);
+
+            CodeEditor.Controls.CodeEditor.Init();
         }
 
         public static void Main()

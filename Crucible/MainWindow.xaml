@@ -15,8 +15,8 @@
     FontFamily="Tahoma"
     Title="Crucible"
     WindowStartupLocation="CenterScreen"
-    Height="972"
-    Width="1728">
+    Height="720"
+    Width="1280">
     <!--<Window.Resources>
         <presentation2009:RoutedCommand x:Key="SaveAllRoutedCommand"/>
     </Window.Resources>-->

@@ -9,25 +9,25 @@ namespace P4KLib
 {
     class CentralDirectoryEnd : IPackageStructure
     {
-        public short disk_number;
-        public short disk_number_w_cd;
-        public short disk_entries;
-        public short total_entries;
-        public int central_directory_size;
-        public int offset_of_cd_starting_disk;
-        public short comment_length;
-        public string comment;
+        public short DiskNumber;
+        public short DiskNumberWithCD;
+        public short DiskEntries;
+        public short TotalEntries;
+        public int CentralDirectorySize;
+        public int OffsetOfCdStartingDisk;
+        public short CommentLength;
+        public string Comment;
 
         public CentralDirectoryEnd(Stream stream, CustomBinaryReader reader)
         {
-            disk_number = reader.ReadInt16();
-            disk_number_w_cd = reader.ReadInt16();
-            disk_entries = reader.ReadInt16();
-            total_entries = reader.ReadInt16();
-            central_directory_size = reader.ReadInt32();
-            offset_of_cd_starting_disk = reader.ReadInt32();
-            comment_length = reader.ReadInt16();
-            comment = reader.ReadString(comment_length);
+            DiskNumber = reader.ReadInt16();
+            DiskNumberWithCD = reader.ReadInt16();
+            DiskEntries = reader.ReadInt16();
+            TotalEntries = reader.ReadInt16();
+            CentralDirectorySize = reader.ReadInt32();
+            OffsetOfCdStartingDisk = reader.ReadInt32();
+            CommentLength = reader.ReadInt16();
+            Comment = reader.ReadString(CommentLength);
         }
 
         public byte[] CreateBinaryData(bool header)
@@ -50,14 +50,14 @@ namespace P4KLib
                 writer.Write((byte)0x06);
             }
 
-            writer.Write(disk_number);
-            writer.Write(disk_number_w_cd);
-            writer.Write(disk_entries);
-            writer.Write(total_entries);
-            writer.Write(central_directory_size);
-            writer.Write(offset_of_cd_starting_disk);
-            writer.Write(comment_length);
-            writer.WriteString(comment, false);
+            writer.Write(DiskNumber);
+            writer.Write(DiskNumberWithCD);
+            writer.Write(DiskEntries);
+            writer.Write(TotalEntries);
+            writer.Write(CentralDirectorySize);
+            writer.Write(OffsetOfCdStartingDisk);
+            writer.Write(CommentLength);
+            writer.WriteString(Comment, false);
         }
     }
 }

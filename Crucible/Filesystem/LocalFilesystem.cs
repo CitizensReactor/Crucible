@@ -297,9 +297,15 @@ namespace Crucible.Filesystem
                                             existingFile = entry;
                                         }
                                     }
-                                    if (existingFile == null) throw new Exception("File should always be found!");
-
-                                    existingParentFolder.Items.Remove(existingFile);
+                                    if (existingFile != null)
+                                    {
+                                        existingParentFolder.Items.Remove(existingFile);
+                                    }
+                                    else
+                                    {
+                                        //TODO: figure out why sometimes files aren't found
+                                        //throw new Exception("File should always be found!");
+                                    }
                                 }
                             }
                             else throw new Exception("Folder should always be found!");

@@ -19,7 +19,7 @@ namespace P4KLib
 
         public string Filepath
         {
-            get => this.centralDirectory.filename;
+            get => this.centralDirectory.Filename;
             set
             {
                 if (Path.IsPathRooted(value))
@@ -35,7 +35,7 @@ namespace P4KLib
         public P4KFile(P4KVFS filesystem, CentralDirectory central_directory, FileStructure file_structure = null)
         {
             this.centralDirectory = central_directory;
-            this.fileStructure = file_structure;
+            this.FileStructure = file_structure;
             this.Filesystem = filesystem;
         }
 
@@ -52,14 +52,14 @@ namespace P4KLib
         }
 
         private FileStructure _fileStructure = null;
-        public FileStructure fileStructure
+        public FileStructure FileStructure
         {
             get
             {
                 if (_fileStructure == null)
                 {
                     var mutex = Filesystem.GetStream(out FileStream stream, out CustomBinaryReader reader, out CustomBinaryWriter writer);
-                    var file_structure = Filesystem.ReadPK(stream, reader, centralDirectory.extra.data_offset) as FileStructure;
+                    var file_structure = Filesystem.ReadPK(stream, reader, centralDirectory.Extra.data_offset) as FileStructure;
                     mutex.ReleaseMutex();
 
                     _fileStructure = file_structure;
@@ -74,14 +74,14 @@ namespace P4KLib
 
         public override string ToString()
         {
-            return $"{Path.GetFileName(centralDirectory.filename)} [{fileStructure.extra.compressed_file_length}b]";
+            return $"{Path.GetFileName(centralDirectory.Filename)} [{FileStructure.Extra.CompressedFileLength}b]";
         }
 
         public byte[] GetRawData()
         {
             var mutex = Filesystem.GetStream(out FileStream stream, out CustomBinaryReader reader, out CustomBinaryWriter writer);
 
-            var result = P4KVFS.ReadDataFromFileSection(stream, reader, fileStructure.extra.file_data_offset, fileStructure.extra.compressed_file_length);
+            var result = P4KVFS.ReadDataFromFileSection(stream, reader, FileStructure.Extra.FileDataOffset, FileStructure.Extra.CompressedFileLength);
 
             mutex.ReleaseMutex();
 
@@ -94,13 +94,13 @@ namespace P4KLib
 
             var crypt = new SHA256Managed();
             var dataHash = crypt.ComputeHash(data);
-            bool isEqual = Enumerable.SequenceEqual(dataHash, this.centralDirectory.extra.sha256_hash);
+            bool isEqual = Enumerable.SequenceEqual(dataHash, this.centralDirectory.Extra.sha256_hash);
             if (!isEqual)
             {
                 throw new Exception("SHA256 integrity check failed");
             }
 
-            if (decrypt && this.centralDirectory.extra.IsAesCrypted)
+            if (decrypt && this.centralDirectory.Extra.IsAesCrypted)
             {
                 if(Filesystem.DecryptFunc != null)
                 {
@@ -116,12 +116,12 @@ namespace P4KLib
 
             
 
-            switch (this._fileStructure.compression)
+            switch (this._fileStructure.CompressionMode)
             {
                 case FileStructure.FileCompressionMode.Uncompressed:
                     break;
                 case FileStructure.FileCompressionMode.ZStd:
-                    data = UnmanagedZStd.ZStd.StreamingUncompress(data, (ulong)this.centralDirectory.extra.uncompressed_file_length);
+                    data = UnmanagedZStd.ZStd.StreamingUncompress(data, (ulong)this.centralDirectory.Extra.uncompressed_file_length);
                     break;
                 default:
                     throw new NotImplementedException();

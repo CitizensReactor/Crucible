@@ -19,14 +19,56 @@ namespace Crucible.Filesystem
         public bool IsDirectory { get; }
         private ObservableCollection<IFilesystemEntry> _Items;
         public ObservableCollection<IFilesystemEntry> Items { get => _Items; internal set => SetProperty(ref _Items, value); }
-        public bool IsEncrypted => InternalVirtualFile?.centralDirectory?.extra?.IsAesCrypted ?? false;
+        public bool IsEncrypted => InternalVirtualFile?.centralDirectory?.Extra?.IsAesCrypted ?? false;
         public string FullPath => IsDirectory ? Directory : InternalVirtualFile.Filepath;
         private bool _IsExpanded;
         public bool IsExpanded { get => _IsExpanded; set => SetProperty(ref _IsExpanded, value); }
         public string Namespace => "p4k";
         public FileType Type { get; }
-        public long Size => IsDirectory ? -1 : InternalVirtualFile.fileStructure.uncompressed_size;
-        public DateTime LastModifiedDate => IsDirectory ? new DateTime(0) : new DateTime(0 /* TODO */);
+        public long Size
+        {
+            get
+            {
+                if (IsDirectory)
+                {
+                    return -1;
+                }
+                switch (InternalVirtualFile.FileStructure.CompressionMode)
+                {
+                    case FileStructure.FileCompressionMode.Uncompressed:
+                        return InternalVirtualFile.FileStructure.UncompressedSize;
+                    case FileStructure.FileCompressionMode.ZStd:
+                        return InternalVirtualFile.FileStructure.Extra.UncompressedFileLength;
+                }
+                return -1;
+            }
+        }
+        public DateTime LastModifiedDate
+        {
+            get
+            {
+                Int32 dosTime = InternalVirtualFile?.FileStructure?.ModificationTime ?? 0;
+                Int32 dosDate = InternalVirtualFile?.FileStructure?.ModificationDate ?? 0;
+
+                Int32 dosSeconds2 = (dosTime >> 0) & 0b1111;
+                Int32 dosSeconds = dosSeconds2 * 2;
+                Int32 dosMinutes = (dosTime >> 5) & 0b11111;
+                Int32 dosHour = (dosTime >> 11) & 0b1111;
+
+                Int32 dosDay = (dosDate >> 0) & 0b1111;
+                Int32 dosMonth = (dosDate >> 5) & 0b111;
+                dosMonth += 1;
+                Int32 dosYear = (dosDate >> 9) & 0b111111111;
+                dosYear += 1980;
+
+                if (dosTime == 0 && dosDate == 0)
+                {
+                    return new DateTime(0);
+                }
+
+                return new DateTime(dosYear, dosMonth, dosDay, dosHour, dosMinutes, dosSeconds);
+            }
+        }
 
         public void Sort()
         {

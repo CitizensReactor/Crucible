@@ -9,44 +9,44 @@ namespace P4KLib
 {
     public class FileStructure : IPackageStructure
     {
-        public short version;
-        public short version_needed;
-        public short flags;
-        public FileCompressionMode compression;
-        public short modtime;
-        public short moddate;
-        public int crc32;
-        public int compressed_size;
-        public int uncompressed_size;
-        public short filename_length;
-        public short extra_length;
-        public short filecomment_length;
-        public short disk_num_start;
-        public short internal_attr;
-        public int external_attr;
-        public int offset_of_local_header;
-        public string filename;
-        public FileStructureExtraData extra;
-        public string filecomment;
+        public short Version;
+        public short VersionNeeded;
+        public short Flags;
+        public FileCompressionMode CompressionMode;
+        public short ModificationTime;
+        public short ModificationDate;
+        public int CRC32;
+        public int CompressedSize;
+        public int UncompressedSize;
+        public short FilenameLength;
+        public short ExtraLength;
+        public short CommentLength;
+        public short DiskNumberStart;
+        public short InternalAttribute;
+        public int ExternalAttribute;
+        public int OffsetOfLocalHeader;
+        public string Filename;
+        public FileStructureExtraData Extra;
+        public string Comment;
 
         public FileStructure(Stream stream, CustomBinaryReader reader)
         {
             if ((stream.Position - 4) % 0x1000 != 0)
                 throw new Exception("File Data Section Alignment Error (Pre Read)");
 
-            version = reader.ReadInt16();
-            flags = reader.ReadInt16();
-            compression = (FileCompressionMode)reader.ReadInt16();
-            modtime = reader.ReadInt16();
-            moddate = reader.ReadInt16();
-            crc32 = reader.ReadInt32();
-            compressed_size = reader.ReadInt32();
-            uncompressed_size = reader.ReadInt32();
-            filename_length = reader.ReadInt16();
-            extra_length = reader.ReadInt16();
+            Version = reader.ReadInt16();
+            Flags = reader.ReadInt16();
+            CompressionMode = (FileCompressionMode)reader.ReadInt16();
+            ModificationTime = reader.ReadInt16();
+            ModificationDate = reader.ReadInt16();
+            CRC32 = reader.ReadInt32();
+            CompressedSize = reader.ReadInt32();
+            UncompressedSize = reader.ReadInt32();
+            FilenameLength = reader.ReadInt16();
+            ExtraLength = reader.ReadInt16();
 
-            filename = reader.ReadString(filename_length);
-            extra = new FileStructureExtraData(stream, reader, extra_length);
+            Filename = reader.ReadString(FilenameLength);
+            Extra = new FileStructureExtraData(stream, reader, ExtraLength);
 
         }
 
@@ -58,21 +58,21 @@ namespace P4KLib
 
         public FileStructure(string _filename, byte[] data)
         {
-            version = 0;
-            flags = 0;
-            compression = FileCompressionMode.Uncompressed;
-            modtime = 0;
-            moddate = 0;
-            crc32 = (int)Cryptography.Crc32Algorithm.Compute(data);
-            compressed_size = -1;
-            uncompressed_size = -1;
-            filename_length = (short)_filename.Length;
+            Version = 0;
+            Flags = 0;
+            CompressionMode = FileCompressionMode.Uncompressed;
+            ModificationTime = 0;
+            ModificationDate = 0;
+            CRC32 = (int)Cryptography.Crc32Algorithm.Compute(data);
+            CompressedSize = -1;
+            UncompressedSize = -1;
+            FilenameLength = (short)_filename.Length;
 
             //TODO: Calculate this value, make sure alignment to 0x1000
-            extra_length = 0;
+            ExtraLength = 0;
 
-            filename = _filename;
-            extra = new FileStructureExtraData(_filename, data);
+            Filename = _filename;
+            Extra = new FileStructureExtraData(_filename, data);
 
         }
 
@@ -99,23 +99,23 @@ namespace P4KLib
                 writer.Write((byte)0x14);
             }
 
-            var extra_data = extra.CreateBinaryData();
-            extra_length = (short)extra_data.Length;
+            var extra_data = Extra.CreateBinaryData();
+            ExtraLength = (short)extra_data.Length;
 
-            writer.Write(version);
-            writer.Write(flags);
-            writer.Write((short)compression);
-            writer.Write(modtime);
-            writer.Write(moddate);
-            writer.Write(crc32);
-            writer.Write(compressed_size);
-            writer.Write(uncompressed_size);
-            writer.Write(filename_length);
+            writer.Write(Version);
+            writer.Write(Flags);
+            writer.Write((short)CompressionMode);
+            writer.Write(ModificationTime);
+            writer.Write(ModificationDate);
+            writer.Write(CRC32);
+            writer.Write(CompressedSize);
+            writer.Write(UncompressedSize);
+            writer.Write(FilenameLength);
 
             var extra_length_position = stream.Position;
-            writer.Write(extra_length);
+            writer.Write(ExtraLength);
 
-            writer.WriteString(filename, false);
+            writer.WriteString(Filename, false);
             var extra_data_start_position  = stream.Position;
             writer.Write(extra_data);
 
@@ -125,45 +125,44 @@ namespace P4KLib
             var end = stream.Position;
             var padding_remaining = 0x1000 - (end - start);
             stream.Position = extra_length_position;
-            extra_length += (short)padding_remaining;
-            writer.Write((short)extra_length);
+            ExtraLength += (short)padding_remaining;
+            writer.Write((short)ExtraLength);
 
-            stream.Position = extra_data_start_position + extra_length;
+            stream.Position = extra_data_start_position + ExtraLength;
         }
 
         public class FileStructureExtraData : IPackageStructureExtra
         {
-            public short unknown_id;
-            public short structure_size_after_header;
-            public int uncompressed_file_length;
-            private int unknownD; // potentially uncompressed_file_length hidword
-            public int compressed_file_length;
-            private int unknownF; // potentially compressed_file_length hidword
-            public long data_offset;
-            private int unknownG;
-            private int timestamp_maybe_but_not_sure;
-
-            public long file_data_offset;
+            public short _UnknownID;
+            public short StructureSizeAfterHeader;
+            public int UncompressedFileLength;
+            private int _UnknownD; // potentially uncompressed_file_length hidword
+            public int CompressedFileLength;
+            private int _UnknownF; // potentially compressed_file_length hidword
+            public long DataOffset;
+            private int _UnknownG;
+            private int _Timestamp_Maybe_But_Not_Sure;
+            public long FileDataOffset;
 
             public FileStructureExtraData(Stream stream, CustomBinaryReader reader, int extra_length)
             {
                 var end = stream.Position + extra_length;
 
-                unknown_id = reader.ReadInt16();
-                structure_size_after_header = reader.ReadInt16();
+                _UnknownID = reader.ReadInt16();
+                StructureSizeAfterHeader = reader.ReadInt16();
 
-                uncompressed_file_length = reader.ReadInt32();
-                unknownD = reader.ReadInt32();
-                compressed_file_length = reader.ReadInt32();
-                unknownF = reader.ReadInt32();
+                UncompressedFileLength = reader.ReadInt32();
+                _UnknownD = reader.ReadInt32();
+                CompressedFileLength = reader.ReadInt32();
+                _UnknownF = reader.ReadInt32();
 
                 var data_offset_ldword = (Int64)reader.ReadUInt32();
                 var data_offset_hdword = (Int64)reader.ReadUInt32();
 
-                data_offset = data_offset_ldword + (data_offset_hdword << 32);
+                DataOffset = data_offset_ldword + (data_offset_hdword << 32);
 
-                unknownG = reader.ReadInt32();
-                timestamp_maybe_but_not_sure = reader.ReadInt32();
+                _UnknownG = reader.ReadInt32();
+                _Timestamp_Maybe_But_Not_Sure = reader.ReadInt32();
 
                 // here be demons and lots of padding
                 // make sure we read this to ensure the stream position is correct
@@ -174,21 +173,21 @@ namespace P4KLib
                 if (stream.Position % 0x1000 != 0)
                     throw new Exception("File Data Section Alignment Error (End Extra Read)");
 
-                file_data_offset = stream.Position;
+                FileDataOffset = stream.Position;
             }
 
             public FileStructureExtraData(string filename, byte[] data)
             {
-                unknown_id = 0x0001;
-                structure_size_after_header = 0x0020; // length of the extradata after this point
-                uncompressed_file_length = data.Length; // TODO: Compress the data
-                unknownD = 0;
-                compressed_file_length = data.Length;
-                unknownF = 0;
+                _UnknownID = 0x0001;
+                StructureSizeAfterHeader = 0x0020; // length of the extradata after this point
+                UncompressedFileLength = data.Length; // TODO: Compress the data
+                _UnknownD = 0;
+                CompressedFileLength = data.Length;
+                _UnknownF = 0;
 
-                data_offset = 0; // this is set externally later
-                unknownG = 0;
-                timestamp_maybe_but_not_sure = 0;
+                DataOffset = 0; // this is set externally later
+                _UnknownG = 0;
+                _Timestamp_Maybe_But_Not_Sure = 0;
             }
 
             public byte[] CreateBinaryData()
@@ -196,15 +195,15 @@ namespace P4KLib
                 using (MemoryStream stream = new MemoryStream())
                 using (CustomBinaryWriter writer = new CustomBinaryWriter(stream, Encoding.ASCII))
                 {
-                    writer.Write(unknown_id);
-                    writer.Write(structure_size_after_header);
-                    writer.Write(uncompressed_file_length);
-                    writer.Write(unknownD);
-                    writer.Write(compressed_file_length);
-                    writer.Write(unknownF);
+                    writer.Write(_UnknownID);
+                    writer.Write(StructureSizeAfterHeader);
+                    writer.Write(UncompressedFileLength);
+                    writer.Write(_UnknownD);
+                    writer.Write(CompressedFileLength);
+                    writer.Write(_UnknownF);
 
-                    var data_offset_ldword = (int)(data_offset & 0xFFFFFFFF);
-                    var data_offset_hdword = (int)((data_offset >> 32) & 0xFFFFFFFF);
+                    var data_offset_ldword = (int)(DataOffset & 0xFFFFFFFF);
+                    var data_offset_hdword = (int)((DataOffset >> 32) & 0xFFFFFFFF);
 
                     writer.Write(data_offset_ldword);
                     writer.Write(data_offset_hdword);

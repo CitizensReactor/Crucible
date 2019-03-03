@@ -10,13 +10,13 @@ namespace P4KLib
     class CentralDirectoryLocatorOffset : IPackageStructure
     {
         private int unknownA;
-        public long directory_locator_offset;
+        public long DirectoryLocatorOffset;
         private int unknownB;
 
         public CentralDirectoryLocatorOffset(Stream stream, CustomBinaryReader reader)
         {
             unknownA = reader.ReadInt32();
-            directory_locator_offset = reader.ReadInt64();
+            DirectoryLocatorOffset = reader.ReadInt64();
             unknownB = reader.ReadInt32();
         }
 
@@ -42,7 +42,7 @@ namespace P4KLib
             }
 
             writer.Write(unknownA);
-            writer.Write(directory_locator_offset);
+            writer.Write(DirectoryLocatorOffset);
             writer.Write(unknownB);
         }
     }

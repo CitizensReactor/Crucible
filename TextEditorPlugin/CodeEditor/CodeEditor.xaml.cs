@@ -277,19 +277,10 @@ namespace CodeEditor.Controls
 
         private void CodeEditor_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            //if ((bool)e.NewValue && Instance.AutoRefresh)
-            {
-                Refresh();
-            }
+            
         }
 
-        public void Refresh()
-        {
-            //Browser.Load($"custom://cefsharp/{Instance.Fullname}");
-        }
-
-        private static int _Init = Init();
-        private static int Init()
+        public static int Init()
         {
             var settings = new CefSettings();
             settings.BrowserSubprocessPath = TextEditorPlugin.browser;

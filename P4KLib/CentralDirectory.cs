@@ -60,51 +60,48 @@ namespace P4KLib
         private short _Version;
         private short _RequiredVersion;
 
-
-
-
         private short Flags;
-        private short compression;
-        private short modtime;
-        private short moddate;
-        private int crc32;
-        private int compressed_size;
-        private int uncompressed_size;
-        private short filename_length;
-        private short extra_length;
-        private short filecomment_length;
-        private short disk_num_start;
-        private short internal_attr;
-        private int external_attr;
-        private int offset_of_local_header;
+        private short Compression;
+        private short ModificationTime;
+        private short ModificationDate;
+        private int CRC32;
+        private int CompressedSize;
+        private int UncompressedSize;
+        private short FilenameLength;
+        private short ExtraLength;
+        private short CommentLength;
+        private short DiskNumberStart;
+        private short InternalAttribute;
+        private int ExternalAttribute;
+        private int OffsetOfLocalHeader;
 
-        public string filename;
-        public CentralDirectoryExtraData extra;
-        public string filecomment;
+        public string Filename;
+        public CentralDirectoryExtraData Extra;
+        public string Comment;
 
         public CentralDirectory(Stream stream, CustomBinaryReader reader)
         {
             _Version = reader.ReadInt16();
             _RequiredVersion = reader.ReadInt16();
             Flags = reader.ReadInt16();
-            compression = reader.ReadInt16();
-            modtime = reader.ReadInt16();
-            moddate = reader.ReadInt16();
-            crc32 = reader.ReadInt32();
-            compressed_size = reader.ReadInt32();
-            uncompressed_size = reader.ReadInt32();
-            filename_length = reader.ReadInt16();
-            extra_length = reader.ReadInt16();
-            filecomment_length = reader.ReadInt16();
-            disk_num_start = reader.ReadInt16();
-            internal_attr = reader.ReadInt16();
-            external_attr = reader.ReadInt32();
-            offset_of_local_header = reader.ReadInt32();
+            Compression = reader.ReadInt16();
+            ModificationTime = reader.ReadInt16();
+            ModificationDate = reader.ReadInt16();
+            CRC32 = reader.ReadInt32();
+            CompressedSize = reader.ReadInt32();
+            UncompressedSize = reader.ReadInt32();
+            FilenameLength = reader.ReadInt16();
+            ExtraLength = reader.ReadInt16();
+            CommentLength = reader.ReadInt16();
+            DiskNumberStart = reader.ReadInt16();
+            InternalAttribute = reader.ReadInt16();
+            ExternalAttribute = reader.ReadInt32();
+            OffsetOfLocalHeader = reader.ReadInt32();
 
-            filename = reader.ReadString(filename_length);
+            Filename = reader.ReadString(FilenameLength);
 
-            extra = new CentralDirectoryExtraData(stream, reader, extra_length);
-            filecomment = reader.ReadString(filecomment_length);
+            Extra = new CentralDirectoryExtraData(stream, reader, ExtraLength);
+            Comment = reader.ReadString(CommentLength);
 
         }
 
@@ -113,23 +110,23 @@ namespace P4KLib
             _Version = 0;
             _RequiredVersion = 0;
             Flags = 0;
-            compression = 0;
-            modtime = 0; //TODO
-            moddate = 0; //TODO
-            crc32 = (int)Cryptography.Crc32Algorithm.Compute(data);
-            compressed_size = -1;
-            uncompressed_size = -1;
-            filename_length = (short)_filename.Length;
-            extra_length = 0xCE;
-            filecomment_length = 0;
-            disk_num_start = 0;
-            internal_attr = 0;
-            external_attr = 0;
-            offset_of_local_header = 0;
+            Compression = 0;
+            ModificationTime = 0; //TODO
+            ModificationDate = 0; //TODO
+            CRC32 = (int)Cryptography.Crc32Algorithm.Compute(data);
+            CompressedSize = -1;
+            UncompressedSize = -1;
+            FilenameLength = (short)_filename.Length;
+            ExtraLength = 0xCE;
+            CommentLength = 0;
+            DiskNumberStart = 0;
+            InternalAttribute = 0;
+            ExternalAttribute = 0;
+            OffsetOfLocalHeader = 0;
 
-            filename = _filename;
-            extra = new CentralDirectoryExtraData(false);
-            filecomment = "";
+            Filename = _filename;
+            Extra = new CentralDirectoryExtraData(false);
+            Comment = "";
 
         }
 
@@ -146,11 +143,11 @@ namespace P4KLib
 
         public void WriteBinaryToStream(Stream stream, CustomBinaryWriter writer, bool header)
         {
-            byte[] extra_data = extra.CreateBinaryData();
+            byte[] extra_data = Extra.CreateBinaryData();
             if (extra_data.Length != 0xCE)
                 throw new Exception("Invalid extra data size");
 
-            extra_length = (short)extra_data.Length;
+            ExtraLength = (short)extra_data.Length;
 
             if (header)
             {
@@ -163,23 +160,23 @@ namespace P4KLib
             writer.Write(_Version);
             writer.Write(_RequiredVersion);
             writer.Write(Flags);
-            writer.Write(compression);
-            writer.Write(modtime);
-            writer.Write(moddate);
-            writer.Write(crc32);
-            writer.Write(compressed_size);
-            writer.Write(uncompressed_size);
-            writer.Write(filename_length);
-            writer.Write(extra_length);
-            writer.Write(filecomment_length);
-            writer.Write(disk_num_start);
-            writer.Write(internal_attr);
-            writer.Write(external_attr);
-            writer.Write(offset_of_local_header);
+            writer.Write(Compression);
+            writer.Write(ModificationTime);
+            writer.Write(ModificationDate);
+            writer.Write(CRC32);
+            writer.Write(CompressedSize);
+            writer.Write(UncompressedSize);
+            writer.Write(FilenameLength);
+            writer.Write(ExtraLength);
+            writer.Write(CommentLength);
+            writer.Write(DiskNumberStart);
+            writer.Write(InternalAttribute);
+            writer.Write(ExternalAttribute);
+            writer.Write(OffsetOfLocalHeader);
 
-            writer.WriteString(filename, false);
+            writer.WriteString(Filename, false);
             writer.Write(extra_data);
-            writer.WriteString(filecomment, false);
+            writer.WriteString(Comment, false);
         }
 
         public class CentralDirectoryExtraData : IPackageStructureExtra
