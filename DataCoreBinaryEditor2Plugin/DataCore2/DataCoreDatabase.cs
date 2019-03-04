@@ -67,7 +67,7 @@ namespace DataCore2
 
         public DataCoreDatabase(int major, int minor, int revision, int build, string assemblyDirectory, byte[] data, CacheMode cacheMode, bool allowOutOfDateAssembly = false)
         {
-            Crucible.MainWindow.SetStatus("Readng database", -1, -1, -1);
+            Crucible.MainWindow.SetStatus("Readng database", -1);
 
             RawDatabase = new DataCoreBinary(data);
 
@@ -82,24 +82,24 @@ namespace DataCore2
             InitializeSignature(out Signature);
             if (cacheMode == CacheMode.UseCache)
             {
-                Crucible.MainWindow.SetStatus("DataCore2: Reading Cache...", -1, -1, -1);
+                Crucible.MainWindow.SetStatus("DataCore2: Reading Cache...", -1);
                 InitializeAssembly(AssemblyFilepath, AssemblyName, allowOutOfDateAssembly, out _Assembly);
             }
             if (Assembly == null)
             {
                 if (cacheMode != CacheMode.NoCache)
                 {
-                    Crucible.MainWindow.SetStatus("DataCore2: Compiling Cache...", -1, -1, -1);
+                    Crucible.MainWindow.SetStatus("DataCore2: Compiling Cache...", -1);
                 }
                 else
                 {
-                    Crucible.MainWindow.SetStatus("DataCore2: Compiling...", -1, -1, -1);
+                    Crucible.MainWindow.SetStatus("DataCore2: Compiling...", -1);
                 }
                 CreateAssembly(AssemblyFilepath, AssemblyName, cacheMode, out _Assembly);
             }
             if (Assembly != null)
             {
-                Crucible.MainWindow.SetStatus("DataCore2: Initializing Types", -1, -1, -1);
+                Crucible.MainWindow.SetStatus("DataCore2: Initializing Types", -1);
                 InitializeAssemblyTypes(Assembly);
             }
             else
@@ -109,17 +109,17 @@ namespace DataCore2
                 return;
             }
 
-            Crucible.MainWindow.SetStatus("DataCore2: Caching Structure Properties");
+            Crucible.MainWindow.SetStatus("DataCore2: Caching Structure Properties", -1);
             CreateCachedStructureProperties();
 
-            Crucible.MainWindow.SetStatus("DataCore2: Reading Structures");
+            Crucible.MainWindow.SetStatus("DataCore2: Reading Structures", -1);
             ProcessDataTable(out List<IClassFixup> classFixups);
 
-            Crucible.MainWindow.SetStatus("DataCore2: Reading Records");
+            Crucible.MainWindow.SetStatus("DataCore2: Reading Records", -1);
             ReadRecords();
 
             //NOTE: Do these fixups absolutely last so the records GUID table is correct
-            Crucible.MainWindow.SetStatus("DataCore2: Processing Structure Fixups");
+            Crucible.MainWindow.SetStatus("DataCore2: Processing Structure Fixups", -1);
             ProcessFixups(classFixups);
         }
 

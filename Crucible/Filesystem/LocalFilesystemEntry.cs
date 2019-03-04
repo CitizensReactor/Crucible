@@ -30,8 +30,10 @@ namespace Crucible.Filesystem
 
         public void Sort(bool recursive)
         {
-            IEnumerable<IFilesystemEntry> originalItemsOrder = Items.ToList();
-            IEnumerable<IFilesystemEntry> newItemsOrder = Items.ToList();
+            if (!IsDirectory) return;
+
+            IEnumerable<IFilesystemEntry> originalItemsOrder = Items.ToArray();
+            IEnumerable<IFilesystemEntry> newItemsOrder = originalItemsOrder.ToArray();
             newItemsOrder = newItemsOrder.OrderBy(c => c.Name);
             newItemsOrder = newItemsOrder.OrderBy(c => !c.IsDirectory);
 
@@ -50,7 +52,7 @@ namespace Crucible.Filesystem
                 Items = new ObservableCollection<IFilesystemEntry>(newItemsOrder);
             }
 
-            if (recursive && this.IsDirectory)
+            if (recursive)
             {
                 foreach (var file in this.Items)
                 {

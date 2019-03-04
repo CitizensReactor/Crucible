@@ -9,6 +9,7 @@
     xmlns:crucible="clr-namespace:Crucible"
     xmlns:filesystem="clr-namespace:Crucible.Filesystem"
     xmlns:sd="http://icsharpcode.net/sharpdevelop/treeview"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d"
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
     d:DesignHeight="450" d:DesignWidth="800">
@@ -60,98 +61,90 @@
         </ContextMenu>
     </crucible:BindableUserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <sd:SharpTreeView x:Name="treeView2"
+        <sd:SharpTreeView x:Name="treeView2"
                               AllowDrop="True"
                               ShowAlternation="True"
-                              Grid.Column="1"
                               BorderThickness="0"
                               Background="Transparent"
                               Foreground="{StaticResource Editor_Medium_Foreground}">
-                <sd:SharpTreeView.Resources>
-                    <Style TargetType="GridViewColumnHeader">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" Value="Red"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </sd:SharpTreeView.Resources>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Style.Triggers>
-                            <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
-                                <Setter Property="Background" Value="Transparent" />
-                            </Trigger>
-                            <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
-                                <Setter Property="Background" Value="#06FFFFFF" />
-                            </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <EventSetter Event="MouseDoubleClick" Handler="FilesystemItemDoubleClick"/>
-                        <Setter Property="ContextMenu" Value="{StaticResource FilesystemContextMenu}" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.View>
-                    <sd:SharpGridView>
-                        <GridView.Columns>
-                            <GridViewColumn Header="Name">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <sd:SharpTreeNodeView />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <!--<GridViewColumn Header="Name">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FileName}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>-->
-                            <GridViewColumn Header="Date modified">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FileModified, StringFormat=g}">
-                                            <TextBlock.Visibility>
-                                                <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
-                                                    <Binding Path="FileModified" Converter="{StaticResource ValidDate}"/>
-                                                </MultiBinding>
-                                            </TextBlock.Visibility>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Type">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FileType}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Size" Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock TextAlignment="Right" Text="{Binding FileSizeStr}">
-                                            <TextBlock.Visibility>
-                                                <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
-                                                    <Binding Path="FilesystemEntry.IsDirectory" Converter="{StaticResource InvertBoolean}"/>
-                                                    <Binding Path="FileSize" Converter="{StaticResource GreaterThanOrEqualZero}"/>
-                                                </MultiBinding>
-                                            </TextBlock.Visibility>
-                                        </TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView.Columns>
-                    </sd:SharpGridView>
-                </ListView.View>
-            </sd:SharpTreeView>
-        </Grid>
+            <sd:SharpTreeView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="Red"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </sd:SharpTreeView.Resources>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex"  Value="0">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Trigger>
+                        <Trigger Property="ItemsControl.AlternationIndex"  Value="1">
+                            <Setter Property="Background" Value="#06FFFFFF" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=FilesystemEntry.IsEncrypted}" Value="true">
+                            <Setter Property="Foreground" Value="#FF8989FF"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <EventSetter Event="MouseDoubleClick" Handler="FilesystemItemDoubleClick"/>
+                    <EventSetter Event="PreviewMouseDown" Handler="ListViewItem_PreviewMouseDown"/>
+                    <Setter Property="ContextMenu" Value="{StaticResource FilesystemContextMenu}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <sd:SharpGridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="Name" Width="Auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <sd:SharpTreeNodeView />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Date modified">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FileModified, StringFormat=g}">
+                                        <TextBlock.Visibility>
+                                            <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                                <Binding Path="FileModified" Converter="{StaticResource ValidDate}"/>
+                                            </MultiBinding>
+                                        </TextBlock.Visibility>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Type">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FileType}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Size" Width="60">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextAlignment="Right" Text="{Binding FileSizeStr}">
+                                        <TextBlock.Visibility>
+                                            <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
+                                                <Binding Path="FilesystemEntry.IsDirectory" Converter="{StaticResource InvertBoolean}"/>
+                                                <Binding Path="FileSize" Converter="{StaticResource GreaterThanOrEqualZero}"/>
+                                            </MultiBinding>
+                                        </TextBlock.Visibility>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView.Columns>
+                </sd:SharpGridView>
+            </ListView.View>
+        </sd:SharpTreeView>
     </Grid>
 </crucible:BindableUserControl>

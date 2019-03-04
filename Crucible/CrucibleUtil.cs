@@ -17,7 +17,7 @@ namespace Crucible
             string[] suffixes = { "B", "KB", "MB", "GB", "TB", "PB", "EB" };
 
             long bytes = Math.Abs(byteCount);
-            var suffixIndex = (int)(Math.Log((double)bytes) / Math.Log(1024.0));
+            var suffixIndex = Math.Max(0, (int)(Math.Log((double)bytes) / Math.Log(1024.0)));
             var suffix = suffixes[suffixIndex];
             double number = Math.Round(bytes / Math.Pow(1024, suffixIndex), 1);
             var result = (Math.Sign(byteCount) * number).ToString() + suffix;

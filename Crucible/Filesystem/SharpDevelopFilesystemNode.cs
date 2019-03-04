@@ -1,6 +1,9 @@
 ﻿using ICSharpCode.TreeView;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
 
 namespace Crucible.Filesystem
 {
@@ -100,17 +103,134 @@ namespace Crucible.Filesystem
 
         public IFilesystemEntry FilesystemEntry { get; set; }
 
-        public SharpDevelopFilesystemNode(IFilesystemEntry filesystemEntry)
+        private bool Initialized = false;
+
+        public SharpDevelopFilesystemNode(IFilesystemEntry filesystemEntry, bool isRoot = false)
         {
             FilesystemEntry = filesystemEntry;
 
+            this.PropertyChanged += SharpDevelopFilesystemNode_PropertyChanged;
+
+            //if (isRoot)
+            //{
+            //    Initialize(1);
+            //}
+        }
+
+        private void Initialize(int maxDepth = 0)
+        {
+            if (!Initialized && FilesystemEntry.IsDirectory)
+            {
+                FilesystemEntry.Sort();
+
+                var propertyChangedObject = FilesystemEntry as INotifyPropertyChanged;
+                if (propertyChangedObject == null)
+                {
+                    throw new Exception("Expected a INotifyPropertyChanged object");
+                }
+
+                FilesystemEntry.Items.CollectionChanged += Items_CollectionChanged;
+                propertyChangedObject.PropertyChanged += PropertyChangedObject_PropertyChanged;
+
+
+                Initialized = true;
+            }
+
+            UpdateChildren(maxDepth);
+        }
+
+        private void SharpDevelopFilesystemNode_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "IsExpanded":
+                    Initialize(1);
+                    break;
+            }
+        }
+
+        void UpdateChildren(int maxDepth = 0)
+        {
             if (FilesystemEntry.IsDirectory)
             {
-                foreach (var child in FilesystemEntry.Items)
+                SharpDevelopFilesystemNode[] oldEntries;
                 {
-                    Children.Add(new SharpDevelopFilesystemNode(child));
+                    SharpTreeNode[] sharpTreeNodes = new SharpTreeNode[Children.Count];
+                    Children.CopyTo(sharpTreeNodes, 0);
+                    oldEntries = sharpTreeNodes.Cast<SharpDevelopFilesystemNode>().ToArray();
+                }
+
+                // reuse exsting nodes
+                var filesystemEntries = FilesystemEntry.Items;
+                var filesystemEntriesCount = filesystemEntries.Count;
+
+                bool requiresUpdate = false;
+                // check for updates
+                {
+                    requiresUpdate |= oldEntries.Length != filesystemEntriesCount;
+                    if (!requiresUpdate)
+                    {
+                        for (int i = 0; i < filesystemEntriesCount; i++)
+                        {
+                            if (oldEntries[i].FilesystemEntry != filesystemEntries[i])
+                            {
+                                requiresUpdate = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // perform update
+                SharpDevelopFilesystemNode[] newEntries = oldEntries;
+                if (requiresUpdate)
+                {
+                    newEntries = new SharpDevelopFilesystemNode[filesystemEntriesCount];
+
+                    for (var entryIndex = 0; entryIndex < filesystemEntriesCount; entryIndex++)
+                    {
+                        var currentFilesystemEntry = FilesystemEntry.Items[entryIndex];
+
+                        // find existing entry
+                        var existingEntry = oldEntries.Where(entry => {
+                            return entry.FilesystemEntry == currentFilesystemEntry;
+                        }).FirstOrDefault();
+
+                        // use existing or create a new entry
+                        newEntries[entryIndex] = existingEntry ?? new SharpDevelopFilesystemNode(currentFilesystemEntry);
+                    }
+
+                    if (Children.Count > 0)
+                    {
+                        Children.Clear();
+                    }
+                    Children.AddRange(newEntries);
+                }
+                if (maxDepth > 0)
+                {
+                    maxDepth--;
+                    foreach (var entry in newEntries)
+                    {
+                        entry.Initialize(maxDepth);
+                    }
                 }
             }
+        }
+
+        private void PropertyChangedObject_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Items")
+            {
+                FilesystemEntry.Items.CollectionChanged += Items_CollectionChanged;
+                FilesystemEntry.Sort();
+                UpdateChildren();
+            }
+        }
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            FilesystemEntry.Sort();
+            UpdateChildren();
         }
     }
 }

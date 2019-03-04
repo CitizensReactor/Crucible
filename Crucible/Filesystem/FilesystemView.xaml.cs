@@ -24,12 +24,12 @@ namespace Crucible.Filesystem
         public FilesystemView(IVirtualFilesystem filesystem)
         {
             Filesystem = filesystem;
-            filesystem.RootDirectory.Sort();
+            filesystem.RootDirectory.Sort(false);
             Items = filesystem.RootDirectory.Items;
 
             InitializeComponent();
 
-            var root = new SharpDevelopFilesystemNode(filesystem.RootDirectory);
+            var root = new SharpDevelopFilesystemNode(filesystem.RootDirectory, true);
             treeView2.Root = root;
             treeView2.ShowRoot = false;
 
@@ -131,23 +131,17 @@ namespace Crucible.Filesystem
             if (e.LeftButton != MouseButtonState.Pressed) return;
 
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
-
-            if(filesystemEntry != null)
-            {
-                OpenFilesystemEntry(filesystemEntry);
-                e.Handled = true;
-            }
+            if (filesystemEntry == null) return;
+            OpenFilesystemEntry(filesystemEntry);
+            e.Handled = true;
         }
 
         private void FileContextMenu_Click_Open(object sender, RoutedEventArgs e)
         {
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
-
-            if (filesystemEntry != null)
-            {
-                OpenFilesystemEntry(filesystemEntry);
-                e.Handled = true;
-            }
+            if (filesystemEntry == null) return;
+            OpenFilesystemEntry(filesystemEntry);
+            e.Handled = true;
         }
 
         private void Extract(IFilesystemEntry filesystemEntry, MainWindow.ExtractionMode mode)
@@ -158,23 +152,17 @@ namespace Crucible.Filesystem
         private void FileContextMenu_Click_CustomExtract(object sender, RoutedEventArgs e)
         {
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
-
-            if (filesystemEntry != null)
-            {
-                Extract(filesystemEntry, MainWindow.ExtractionMode.Raw);
-                e.Handled = true;
-            }
+            if (filesystemEntry == null) return;
+            Extract(filesystemEntry, MainWindow.ExtractionMode.Raw);
+            e.Handled = true;
         }
 
         private void FileContextMenu_Click_Extract(object sender, RoutedEventArgs e)
         {
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
-
-            if (filesystemEntry != null)
-            {
-                Extract(filesystemEntry, MainWindow.ExtractionMode.Converted);
-                e.Handled = true;
-            }
+            if (filesystemEntry == null) return;
+            Extract(filesystemEntry, MainWindow.ExtractionMode.Converted);
+            e.Handled = true;
         }
 
         private bool ExtractTo(IFilesystemEntry filesystemEntry, MainWindow.ExtractionMode mode)
@@ -256,22 +244,22 @@ namespace Crucible.Filesystem
         private void FileContextMenu_Click_Extract_To(object sender, RoutedEventArgs e)
         {
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
-
-            if (filesystemEntry != null)
-            {
-                e.Handled = ExtractTo(filesystemEntry, MainWindow.ExtractionMode.Converted);
-            }
+            if (filesystemEntry == null) return;
+            e.Handled = ExtractTo(filesystemEntry, MainWindow.ExtractionMode.Converted);
         }
 
         private void FileContextMenu_Click_CustomExtract_To(object sender, RoutedEventArgs e)
         {
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
-
-            if (filesystemEntry != null)
-            {
-                e.Handled = ExtractTo(filesystemEntry, MainWindow.ExtractionMode.Raw);
-            }
+            if (filesystemEntry == null) return;
+            e.Handled = ExtractTo(filesystemEntry, MainWindow.ExtractionMode.Raw);
         }
 
+        private void ListViewItem_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
+            //if (filesystemEntry == null) return;
+            //filesystemEntry.Sort();
+        }
     }
 }

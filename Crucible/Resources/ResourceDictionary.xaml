@@ -43,7 +43,7 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{StaticResource Editor_Accent_Grey_Color}"/>
     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{StaticResource Editor_Light_Foreground_Color}"/>
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrush}" Color="{StaticResource Editor_Light_Foreground_Color}"/>
-    
+
     <Style TargetType="{x:Type TreeView}">
         <Setter Property="Background" Value="{StaticResource Editor_Dark_Background}" />
         <Setter Property="Foreground" Value="{StaticResource Editor_Medium_Foreground}" />
@@ -52,17 +52,18 @@
     <Style TargetType="{x:Type TreeViewItem}">
         <Setter Property="Foreground" Value="{StaticResource Editor_Light_Foreground}" />
     </Style>
-
-    <Style TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource {x:Type ContextMenu}}">
-        <Setter Property="Background" Value="{StaticResource Editor_Dark_Background}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Editor_Medium_Background}"/>
-
+    <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="FontFamily" Value="R_Ansi"></Setter>
-        <Setter Property="ContextMenu.Margin" Value="0,0,0,0"></Setter>
-        <Setter Property="TextElement.Background" Value="White"></Setter>
-        <Setter Property="TextBlock.Background" Value="White"></Setter>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Border Background="{StaticResource Editor_Dark_Background}" BorderBrush="White" BorderThickness="0">
+                        <StackPanel ClipToBounds="True" Orientation="Vertical" IsItemsHost="True" Margin="5,4,5,4"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 
@@ -347,7 +348,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="{StaticResource Editor_Dark_Background}"/>
@@ -684,6 +685,29 @@
         <Setter Property="Margin" Value="2"/>
     </Style>
 
+    <Path
+        x:Key="CloseButtonIcon"
+        x:Shared="False"
+        Stretch="Fill" 
+        Margin="2" 
+        Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Mode=TwoWay}"
+        Data="F1 M 151,217L 152,217L 154.5,219.5L 157,217L 158,217L 158,218L 155.5,220.5L 158,223L 158,224L 157,224L 154.5,221.5L 152,224L 151,224L 151,223L 153.5,220.5L 151,218L 151,217 Z"/>
+    <Path 
+        x:Key="MinimizeButtonIcon"
+        x:Shared="False"
+        Stretch="Fill" 
+        Margin="2,11,2,2" 
+        Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Mode=TwoWay}"
+        Data="M0,0 L8,0 8,1 8,2 0,2 0,1 z"/>
+
+    <Path 
+        x:Key="MaximizeButtonIcon"
+        x:Shared="False"
+        Stretch="Fill" 
+        Margin="2" 
+        Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Mode=TwoWay}"
+        Data="F1 M 34,17L 43,17L 43,23L 34,23L 34,17 Z M 35,19L 35,22L 42,22L 42,19L 35,19 Z"/>
+
     <Style x:Key="CloseButton" TargetType="{x:Type Button}"  BasedOn="{StaticResource WindowTopRightButton}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
@@ -694,11 +718,7 @@
         </Style.Triggers>
         <Setter Property="Content">
             <Setter.Value>
-                <Path 
-                    Stretch="Fill" 
-                    Margin="2" 
-                    Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Mode=TwoWay}"
-                    Data="F1 M 151,217L 152,217L 154.5,219.5L 157,217L 158,217L 158,218L 155.5,220.5L 158,223L 158,224L 157,224L 154.5,221.5L 152,224L 151,224L 151,223L 153.5,220.5L 151,218L 151,217 Z"/>
+                <StaticResource ResourceKey="CloseButtonIcon"/>
             </Setter.Value>
         </Setter>
     </Style>
@@ -706,11 +726,7 @@
     <Style x:Key="MinimizeButton" TargetType="{x:Type Button}" BasedOn="{StaticResource WindowTopRightButton}">
         <Setter Property="Content">
             <Setter.Value>
-                <Path 
-                    Stretch="Fill" 
-                    Margin="2,11,2,2" 
-                    Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Mode=TwoWay}"
-                    Data="M0,0 L8,0 8,1 8,2 0,2 0,1 z"/>
+                <StaticResource ResourceKey="MinimizeButtonIcon"/>
             </Setter.Value>
         </Setter>
     </Style>
@@ -718,11 +734,7 @@
     <Style x:Key="MaximizeButton" TargetType="{x:Type Button}" BasedOn="{StaticResource WindowTopRightButton}">
         <Setter Property="Content">
             <Setter.Value>
-                <Path 
-                    Stretch="Fill" 
-                    Margin="2" 
-                    Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}, Mode=TwoWay}"
-                    Data="F1 M 34,17L 43,17L 43,23L 34,23L 34,17 Z M 35,19L 35,22L 42,22L 42,19L 35,19 Z"/>
+                <StaticResource ResourceKey="MaximizeButtonIcon"/>
             </Setter.Value>
         </Setter>
     </Style>

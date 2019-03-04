@@ -354,7 +354,22 @@ namespace Crucible
 
         #region Status
 
-        public static void SetStatus(string text = null, int value = 0, int max_value = 0)
+        public static void SetStatus()
+        {
+            PrimaryWindow?.SetStatusInternal(null);
+        }
+
+        public static void SetStatus(string text)
+        {
+            PrimaryWindow?.SetStatusInternal(text);
+        }
+
+        public static void SetStatus(string text, int time)
+        {
+            PrimaryWindow?.SetStatusInternal(text, time);
+        }
+
+        public static void SetStatus(string text , int value, int max_value)
         {
             PrimaryWindow?.SetStatusInternal(text, value, max_value);
         }
