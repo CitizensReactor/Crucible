@@ -13,8 +13,8 @@ namespace P4KLib
         public short VersionNeeded;
         public short Flags;
         public FileCompressionMode CompressionMode;
-        public short ModificationTime;
-        public short ModificationDate;
+        public ushort ModificationTime;
+        public ushort ModificationDate;
         public int CRC32;
         public int CompressedSize;
         public int UncompressedSize;
@@ -37,8 +37,8 @@ namespace P4KLib
             Version = reader.ReadInt16();
             Flags = reader.ReadInt16();
             CompressionMode = (FileCompressionMode)reader.ReadInt16();
-            ModificationTime = reader.ReadInt16();
-            ModificationDate = reader.ReadInt16();
+            ModificationTime = reader.ReadUInt16();
+            ModificationDate = reader.ReadUInt16();
             CRC32 = reader.ReadInt32();
             CompressedSize = reader.ReadInt32();
             UncompressedSize = reader.ReadInt32();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,30 +44,26 @@ namespace Crucible.Filesystem
                 return -1;
             }
         }
+
         public DateTime LastModifiedDate
         {
             get
             {
-                Int32 dosTime = InternalVirtualFile?.FileStructure?.ModificationTime ?? 0;
-                Int32 dosDate = InternalVirtualFile?.FileStructure?.ModificationDate ?? 0;
+                if(this.IsDirectory)
+                {
+                    return new DateTime(0);
+                }
 
-                Int32 dosSeconds2 = (dosTime >> 0) & 0b1111;
-                Int32 dosSeconds = dosSeconds2 * 2;
-                Int32 dosMinutes = (dosTime >> 5) & 0b11111;
-                Int32 dosHour = (dosTime >> 11) & 0b1111;
-
-                Int32 dosDay = (dosDate >> 0) & 0b1111;
-                Int32 dosMonth = (dosDate >> 5) & 0b111;
-                dosMonth += 1;
-                Int32 dosYear = (dosDate >> 9) & 0b111111111;
-                dosYear += 1980;
+                UInt16 dosTime = InternalVirtualFile.FileStructure.ModificationTime;
+                UInt16 dosDate = InternalVirtualFile.FileStructure.ModificationDate;
 
                 if (dosTime == 0 && dosDate == 0)
                 {
                     return new DateTime(0);
                 }
 
-                return new DateTime(dosYear, dosMonth, dosDay, dosHour, dosMinutes, dosSeconds);
+                var result = CrucibleUtil.ConvertDosDateTime(dosDate, dosTime);
+                return result;
             }
         }
 

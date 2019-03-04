@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -104,6 +105,23 @@ namespace Crucible
                 return Enum.ToObject(typeof(T), obj);
             }
             return Convert.ChangeType(obj, typeof(T));
+        }
+
+        [DllImport("kernel32.dll")]
+        internal static extern bool DosDateTimeToFileTime(ushort wFatDate, ushort wFatTime, out UFILETIME lpFileTime);
+
+        internal struct UFILETIME
+        {
+            public uint dwLowDateTime;
+            public uint dwHighDateTime;
+        }
+
+        internal static DateTime ConvertDosDateTime(ushort DosDate, ushort DosTime)
+        {
+            UFILETIME filetime = new UFILETIME();
+            DosDateTimeToFileTime(DosDate, DosTime, out filetime);
+            long longfiletime = (long)(((ulong)filetime.dwHighDateTime << 32) +  (ulong)filetime.dwLowDateTime);
+            return DateTime.FromFileTimeUtc(longfiletime);
         }
     }
 }

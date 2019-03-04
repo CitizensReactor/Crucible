@@ -33,7 +33,8 @@
     <ValueConverter:MaximizedToVisibility x:Key="MaximizedToVisibility"/>
     <ValueConverter:MaximizedToInvisibility x:Key="MaximizedToInvisibility"/>
     <ValueConverter:LowerCaseConverter x:Key="LowerCaseConverter"/>
-
+    <ValueConverter:UtcToLocalDateTimeConverter x:Key="UtcToLocalDateTimeConverter"/>
+    
 
     <Thickness x:Key="FieldEditor_Generic_Property_Padding" Left="5" Top="2" Right="0" Bottom="2"  />
     <Thickness x:Key="FieldEditor_Container_Property_Padding" Left="5" Top="2" Right="4" Bottom="2"  />

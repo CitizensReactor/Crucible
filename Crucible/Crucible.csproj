@@ -168,6 +168,7 @@
     <Compile Include="FileTypeChecker.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="CrucibleUtil.cs" />
+    <Compile Include="ValueConverter\UtcToLocalDateTimeConverter.cs" />
     <Compile Include="ValueConverter\ValidDate.cs" />
     <Compile Include="ValueConverter\AllFalse.cs" />
     <Compile Include="ValueConverter\AnyTrue.cs" />

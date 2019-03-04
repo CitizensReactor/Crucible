@@ -111,7 +111,7 @@
                         <GridViewColumn Header="Date modified">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding FileModified, StringFormat=g}">
+                                    <TextBlock Text="{Binding FileModified, Converter={StaticResource UtcToLocalDateTimeConverter}}">
                                         <TextBlock.Visibility>
                                             <MultiBinding Converter="{StaticResource AllTrueToVisibility}">
                                                 <Binding Path="FileModified" Converter="{StaticResource ValidDate}"/>
