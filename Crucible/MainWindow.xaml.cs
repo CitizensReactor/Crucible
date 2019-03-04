@@ -211,14 +211,14 @@ namespace Crucible
             }
 
             ReadPerforceInformation();
-            if (Perforce.HasValue)
+            if (Perforce != null)
             {
                 const Int64 minSupportedChangelist = 0;
                 const Int64 maxSupportedChangelist = 1179321;
 
                 bool isVersionUnsupported = false;
-                isVersionUnsupported |= Perforce.Value.RequestedP4ChangeNum < minSupportedChangelist;
-                isVersionUnsupported |= Perforce.Value.RequestedP4ChangeNum > maxSupportedChangelist;
+                isVersionUnsupported |= Perforce.RequestedP4ChangeNum < minSupportedChangelist;
+                isVersionUnsupported |= Perforce.RequestedP4ChangeNum > maxSupportedChangelist;
 
                 if (isVersionUnsupported)
                 {
@@ -258,7 +258,7 @@ namespace Crucible
             return;
         }
 
-        private struct P4Information
+        internal class P4Information
         {
             public string Branch;
             public string BuildDateStamp;
@@ -268,7 +268,7 @@ namespace Crucible
             public string Shelved_Change;
             public string Tag;
         }
-        P4Information? Perforce = null;
+        internal P4Information Perforce = null;
 
         void ReadPerforceInformation()
         {
@@ -329,9 +329,9 @@ namespace Crucible
                     builder.Append($" | StarCitizen");
 
                     string versionStr = null;
-                    if (Perforce.HasValue)
+                    if (Perforce != null)
                     {
-                        versionStr += $" {Perforce.Value.Branch} {Perforce.Value.RequestedP4ChangeNum}";
+                        versionStr += $" {Perforce.Branch} {Perforce.RequestedP4ChangeNum}";
                     }
                     if (versionStr != null)
                     {

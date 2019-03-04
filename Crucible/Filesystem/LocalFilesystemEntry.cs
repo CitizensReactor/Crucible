@@ -28,7 +28,7 @@ namespace Crucible.Filesystem
         public long Size => (IsDirectory ? -1 : FileInfo?.Length) ?? -1;
         public DateTime LastModifiedDate => (IsDirectory ? DirectoryInfo?.LastWriteTime : FileInfo?.LastWriteTime) ?? new DateTime(0);
 
-        public void Sort()
+        public void Sort(bool recursive)
         {
             IEnumerable<IFilesystemEntry> originalItemsOrder = Items.ToList();
             IEnumerable<IFilesystemEntry> newItemsOrder = Items.ToList();
@@ -48,6 +48,14 @@ namespace Crucible.Filesystem
             if (isOutOfOrder)
             {
                 Items = new ObservableCollection<IFilesystemEntry>(newItemsOrder);
+            }
+
+            if (recursive && this.IsDirectory)
+            {
+                foreach (var file in this.Items)
+                {
+                    file.Sort(recursive);
+                }
             }
         }
 

@@ -28,7 +28,7 @@ namespace Crucible.Filesystem
         bool SetData(byte[] data);
         FileType Type { get; }
 
-        void Sort();
+        void Sort(bool recursive = false);
 
         #endregion
 

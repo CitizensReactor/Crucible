@@ -70,7 +70,7 @@ namespace Crucible.Filesystem
             }
         }
 
-        public void Sort()
+        public void Sort(bool recursive)
         {
             IEnumerable<IFilesystemEntry> originalItemsOrder = Items.ToList();
             IEnumerable<IFilesystemEntry> newItemsOrder = Items.ToList();
@@ -90,6 +90,14 @@ namespace Crucible.Filesystem
             if(isOutOfOrder)
             {
                 Items = new ObservableCollection<IFilesystemEntry>(newItemsOrder);
+            }
+
+            if(recursive && this.IsDirectory)
+            {
+                foreach(var file in this.Items)
+                {
+                    file.Sort(recursive);
+                }
             }
         }
 
