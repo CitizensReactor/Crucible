@@ -75,7 +75,7 @@
                     </MultiBinding>
                 </Button.IsEnabled>
             </Button>
-            <Button IsEnabled="{Binding ValueIndex, Converter={StaticResource GreaterThanOrEqualZero}}" Grid.Column="4" Width="25" Content="⭢" FontSize="15" Margin="5,0,0,0" Click="OpenReferenceTab" ToolTip="Opens this tag reference."/>
+            <Button IsEnabled="{Binding Path=Value, Converter={StaticResource NullToFalse}}" Grid.Column="4" Width="25" Content="⭢" FontSize="15" Margin="5,0,0,0" Click="OpenReferenceTab" ToolTip="Opens this tag reference."/>
         </Grid>
     </Border>
 </local:DatabaseFieldEditorBase>

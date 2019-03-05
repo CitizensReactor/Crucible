@@ -144,16 +144,23 @@ namespace Crucible.Filesystem
             e.Handled = true;
         }
 
-        private void Extract(IFilesystemEntry filesystemEntry, MainWindow.ExtractionMode mode)
+        private void Extract(MainWindow.ExtractionMode mode, params IFilesystemEntry[] filesystemEntries)
         {
-            MainWindow.PrimaryWindow.ExtractFiles(filesystemEntry as P4KFilesystemEntry, mode);
+            //TODO: Accept the filesystemEntries array
+            //NOTE: Ensure that any duplicates are removed
+            foreach(var filesystemEntry in filesystemEntries)
+            {
+                MainWindow.PrimaryWindow.ExtractFiles(filesystemEntry as P4KFilesystemEntry, mode);
+            }
         }
 
         private void FileContextMenu_Click_CustomExtract(object sender, RoutedEventArgs e)
         {
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
             if (filesystemEntry == null) return;
-            Extract(filesystemEntry, MainWindow.ExtractionMode.Raw);
+
+
+            Extract(MainWindow.ExtractionMode.Raw, filesystemEntry);
             e.Handled = true;
         }
 
@@ -161,7 +168,9 @@ namespace Crucible.Filesystem
         {
             IFilesystemEntry filesystemEntry = GetFilesystemEntry(sender);
             if (filesystemEntry == null) return;
-            Extract(filesystemEntry, MainWindow.ExtractionMode.Converted);
+
+
+            Extract(MainWindow.ExtractionMode.Converted, filesystemEntry);
             e.Handled = true;
         }
 

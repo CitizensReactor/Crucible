@@ -49,7 +49,8 @@ namespace DataCore2
             }
 
             var managedStructureType = ManagedStructureTypes[pointer.StructIndex];
-            var instance = ManagedDataTable[managedStructureType][pointer.VariantIndex];
+            var table = ManagedDataTable[managedStructureType];
+            var instance = table[pointer.VariantIndex];
             return instance;
         }
 

@@ -33,12 +33,15 @@ namespace DataCoreBinary2.DatabaseFieldEditors
             }
             set
             {
-                if(value == -1)
+                _SelectedStructureIndex = -1;
+                if (value == -1)
                 {
                     Value = null;
                 }
-                _SelectedStructureIndex = -1;
-                Value = RecordNameReferences[value];
+                else
+                {
+                    Value = RecordNameReferences[value];
+                }
             }
 
 

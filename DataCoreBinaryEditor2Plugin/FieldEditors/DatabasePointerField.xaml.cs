@@ -141,10 +141,13 @@ namespace DataCoreBinary2.DatabaseFieldEditors
             if(derivedTypes.Count() > 1)
             {
                 PointerCreationTypeSelectionWindow pointerCreationTypeSelectionWindow = new PointerCreationTypeSelectionWindow(derivedTypes);
-                pointerCreationTypeSelectionWindow.ShowDialog();
-                var selectedType = pointerCreationTypeSelectionWindow.SelectedType;
+                bool result = pointerCreationTypeSelectionWindow.ShowDialog() ?? false;
+                if(result)
+                {
+                    var selectedType = pointerCreationTypeSelectionWindow.SelectedType;
 
-                Value = InitializeStructureInstance(selectedType);
+                    Value = InitializeStructureInstance(selectedType);
+                }
             }
             else
             {

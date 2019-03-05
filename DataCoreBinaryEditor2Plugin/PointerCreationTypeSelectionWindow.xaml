@@ -44,7 +44,10 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button Click="CloseButton_Click" Margin="0, 10" Width="120" Height="32">Confirm</Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Click="ConfirmButton_Click" Margin="10" Width="120" Height="32">Confirm</Button>
+                    <Button Click="CloseButton_Click" Margin="10" Width="120" Height="32">Cancel</Button>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Border>

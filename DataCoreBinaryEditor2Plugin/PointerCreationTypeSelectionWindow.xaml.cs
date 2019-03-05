@@ -62,11 +62,19 @@ namespace DataCoreBinary2
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
+            this.Close();
+        }
+
+        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
             this.Close();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             this.Close();
         }
     }
