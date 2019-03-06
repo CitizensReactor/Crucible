@@ -9,7 +9,12 @@
              d:DesignHeight="28" 
              d:DesignWidth="780">
     <UserControl.Resources>
-        <local:EnumToArrayConverter x:Key="EnumToArrayConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Crucible;component/Resources/ResourceDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:EnumToArrayConverter x:Key="EnumToArrayConverter"/>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Border Padding="{StaticResource FieldEditor_Generic_Property_Padding}">
         <Grid>

@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:DataCoreBinary2.FieldEditors"
              mc:Ignorable="d"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <ResourceDictionary Source="pack://application:,,,/Crucible;component/Resources/ResourceDictionary.xaml"/>
+    </UserControl.Resources>
     <Grid>
         <Border Padding="{StaticResource FieldEditor_Generic_Property_Padding}" BorderThickness="1" BorderBrush="#50FF7F7F">
             <TextBlock Foreground="#FF7F7F">

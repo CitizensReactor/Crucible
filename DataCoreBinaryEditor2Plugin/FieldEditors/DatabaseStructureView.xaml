@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:DataCoreBinary2.FieldEditors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary Source="pack://application:,,,/Crucible;component/Resources/ResourceDictionary.xaml"/>
+    </UserControl.Resources>
     <Grid x:Name="Root">
         <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
     </Grid>

@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="28" 
              d:DesignWidth="780">
+    <local:DatabaseFieldEditorBase.Resources>
+        <ResourceDictionary Source="pack://application:,,,/Crucible;component/Resources/ResourceDictionary.xaml"/>
+    </local:DatabaseFieldEditorBase.Resources>
     <Border Padding="{StaticResource FieldEditor_Generic_Property_Padding}">
         <Grid MinHeight="24">
             <Grid.ColumnDefinitions>
