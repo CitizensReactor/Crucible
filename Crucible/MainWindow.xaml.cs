@@ -214,7 +214,7 @@ namespace Crucible
             if (Perforce != null)
             {
                 const Int64 minSupportedChangelist = 0;
-                const Int64 maxSupportedChangelist = 1179321;
+                const Int64 maxSupportedChangelist = 1209915;
 
                 bool isVersionUnsupported = false;
                 isVersionUnsupported |= Perforce.RequestedP4ChangeNum < minSupportedChangelist;
