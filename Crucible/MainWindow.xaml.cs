@@ -211,21 +211,14 @@ namespace Crucible
             }
 
             ReadPerforceInformation();
+            bool isVersionUnsupported = false;
             if (Perforce != null)
             {
                 const Int64 minSupportedChangelist = 0;
-                const Int64 maxSupportedChangelist = 1209915;
+                const Int64 maxSupportedChangelist = 1301981;
 
-                bool isVersionUnsupported = false;
                 isVersionUnsupported |= Perforce.RequestedP4ChangeNum < minSupportedChangelist;
                 isVersionUnsupported |= Perforce.RequestedP4ChangeNum > maxSupportedChangelist;
-
-                if (isVersionUnsupported)
-                {
-                    this.SetStatusInternal("Game version is unsupported", 10);
-                    CloseStarcitizen();
-                    return;
-                }
             }
 
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate ()
@@ -252,6 +245,14 @@ namespace Crucible
 
                 var deltaTime = DateTime.Now - startTime;
                 SetStatusInternal(String.Format($"Finished loading filesystem {local_directory} {{0:0.00}}s", deltaTime.TotalSeconds));
+
+#if !DEBUG
+                if (isVersionUnsupported)
+                {
+                    this.SetStatusInternal("Warning: Game version is unsupported", 10);
+                    System.Media.SystemSounds.Beep.Play();
+                }
+#endif
 
             })).Wait();
 
@@ -352,7 +353,7 @@ namespace Crucible
             }));
         }
 
-        #region Status
+#region Status
 
         public static void SetStatus()
         {
@@ -439,7 +440,7 @@ namespace Crucible
             SetStatusDispatcherTimer.Stop();
         }
 
-        #endregion
+#endregion
 
         private void Menu_Exit_Click(object sender, RoutedEventArgs e)
         {

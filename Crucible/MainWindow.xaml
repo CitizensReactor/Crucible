@@ -59,7 +59,7 @@
                     <MenuItem Header="_File" Style="{StaticResource MenuItemRoot}">
                         <MenuItem Visibility="Collapsed" Header="_New" Command="New" InputGestureText="Ctrl+N" />
                         <MenuItem x:Name="Menu_Open" Header="_Open" Command="Open" InputGestureText="Ctrl+O" />
-                        <MenuItem x:Name="Menu_Close" Header="_Close" Click="Menu_Close_Click" IsEnabled="{Binding Title, RelativeSource={RelativeSource AncestorType=local:BindableWindow}, FallbackValue=Crucible}" />
+                        <MenuItem x:Name="Menu_Close" Header="_Close" Click="Menu_Close_Click" />
                         <Separator Visibility="Collapsed" />
                         <MenuItem Visibility="Collapsed" IsEnabled="False" Header="_Save" Command="Save" InputGestureText="Ctrl+S" />
                         <MenuItem Visibility="Collapsed" IsEnabled="False" Header="_Save As" Command="SaveAs" InputGestureText="Ctrl+Alt+S" />
@@ -113,7 +113,7 @@
                 </Grid>
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                 <DockPanel Grid.Column="2" Grid.ColumnSpan="2" Background="{StaticResource Editor_Medium_Background}">
-                    <TabControl x:Name="Tabs" ItemContainerStyle="{StaticResource ClosableTab}"/>
+                    <TabControl x:Name="Tabs" ItemContainerStyle="{StaticResource ClosableTab}"  />
                 </DockPanel>
             </Grid>
             <DockPanel Grid.Row="2">

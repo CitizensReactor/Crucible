@@ -143,11 +143,14 @@
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="BindableBase.cs" />
-    <Compile Include="ClosableTabButton.xaml.cs">
+    <Compile Include="CustomControls\ClosableTabButton.xaml.cs">
       <DependentUpon>ClosableTabButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="CrucibleApplication.cs" />
     <Compile Include="CrucibleSettings.cs" />
+    <Compile Include="CustomControls\CustomContextMenuItem.xaml.cs">
+      <DependentUpon>CustomContextMenuItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DDSConverter.cs" />
     <Compile Include="DDSTypes.cs" />
     <Compile Include="FileAssociations.cs" />
@@ -191,7 +194,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ClosableTabButton.xaml">
+    <Page Include="CustomControls\ClosableTabButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomControls\CustomContextMenuItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -331,3 +331,6 @@ ASALocalRun/
 
 # Text Editor CEF PDB's
 !TextEditorPlugin/TextEditorPlugin_Resources/*.pdb
+
+# Command Line Args
+*.args.json
