@@ -48,32 +48,25 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del $(TargetPath)
-del $(TargetDir)$(TargetName).pdb
+    <PostBuildEvent>del "$(TargetPath)"
+del "$(TargetDir)$(TargetName).pdb"
 
 echo Crucible
-xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\Crucible.exe.config $(TargetDir) /Y /Q
-xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\*.dll $(TargetDir) /Y /Q
-xcopy $(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\*.exe $(TargetDir) /Y /Q
+xcopy "$(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\Crucible.exe.config" "$(TargetDir)" /Y /Q
+xcopy "$(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\*.dll" "$(TargetDir)" /Y /Q
+xcopy "$(SolutionDir)Crucible\bin\x64\$(ConfigurationName)\*.exe" "$(TargetDir)" /Y /Q
 
 echo TextEditorPlugin
-xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\*.dll $(TargetDir)Plugins\ /Y /Q
-xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.pak $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
-xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.dll $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
-xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.dat $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
-xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.exe $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
-xcopy $(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.bin $(TargetDir)Plugins\TextEditorPlugin_Resources\ /Y /Q
+xcopy "$(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\*.dll" "$(TargetDir)Plugins\" /Y /Q
+xcopy "$(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.pak" "$(TargetDir)Plugins\TextEditorPlugin_Resources\" /Y /Q
+xcopy "$(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.dll" "$(TargetDir)Plugins\TextEditorPlugin_Resources\" /Y /Q
+xcopy "$(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.dat" "$(TargetDir)Plugins\TextEditorPlugin_Resources\" /Y /Q
+xcopy "$(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.exe" "$(TargetDir)Plugins\TextEditorPlugin_Resources\" /Y /Q
+xcopy "$(SolutionDir)TextEditorPlugin\bin\x64\$(ConfigurationName)\TextEditorPlugin_Resources\*.bin" "$(TargetDir)Plugins\TextEditorPlugin_Resources\" /Y /Q
 
 echo DataCoreBinary2Plugin
-xcopy $(SolutionDir)DataCoreBinaryEditor2Plugin\bin\x64\$(ConfigurationName)\*.dll $(TargetDir)Plugins\ /Y /Q
+xcopy "$(SolutionDir)DataCoreBinaryEditor2Plugin\bin\x64\$(ConfigurationName)\*.dll" "$(TargetDir)Plugins\" /Y /Q
 
-if defined AppVeyor (
-    if $(ConfigurationName) == Release (
-        echo Zipping with 7z
-        7z a -t7z -mx9 -r ./crucible.7z *
-        7z a -tzip -mx9 -r ./crucible.zip *
-    )
-)
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

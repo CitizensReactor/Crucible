@@ -68,36 +68,13 @@ namespace Crucible
             }
         }
 
-        //private static FileStream ErrorLog = null;
-
-        
-        static string GetErrorLogFilepath()
-        {
-            return Path.Combine(ApplicationDirectory, "error.log");
-        }
-
-        private static FileStream _ErrorLog = null;
-        static FileStream GetErrorLogFilestream()
-        {
-            if(_ErrorLog != null)
-            {
-                return _ErrorLog;
-            }
-
-            _ErrorLog = new FileStream(GetErrorLogFilepath(), FileMode.Create, FileAccess.Write, FileShare.Read);
-
-            return _ErrorLog;
-        }
+        private static FileStream ErrorLog;
 
         private void RegsiterExceptionHandlers()
         {
-            if(File.Exists(GetErrorLogFilepath()))
-            {
-                File.Delete(GetErrorLogFilepath());
-            }
-
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            
+            var errorLogPath = Path.Combine(ApplicationDirectory, "error.log");
+            ErrorLog = new FileStream(errorLogPath, FileMode.Create, FileAccess.Write, FileShare.Read);
             AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
             Dispatcher.UnhandledException += Dispatcher_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
@@ -180,9 +157,9 @@ namespace Crucible
 
         private void LogException(Exception exception, string header)
         {
-            lock (GetErrorLogFilestream())
+            lock (ErrorLog)
             {
-                using (StreamWriter writer = new StreamWriter(GetErrorLogFilestream(), Encoding.UTF8, 4096, true))
+                using (StreamWriter writer = new StreamWriter(ErrorLog, Encoding.UTF8, 4096, true))
                 {
                     writer.WriteLine(header);
                     writer.WriteLine("Date : " + DateTime.Now.ToString());
@@ -216,9 +193,9 @@ namespace Crucible
                     LogException(exception, "----------------------------- UnhandledException ----------------------------");
                     break;
                 default:
-                    lock (GetErrorLogFilestream())
+                    lock (ErrorLog)
                     {
-                        using (StreamWriter writer = new StreamWriter(GetErrorLogFilestream(), Encoding.UTF8, 4096, true))
+                        using (StreamWriter writer = new StreamWriter(ErrorLog, Encoding.UTF8, 4096, true))
                         {
                             writer.WriteLine("----------------------- UnhandledException (Unknown) ------------------------");
                             writer.WriteLine();

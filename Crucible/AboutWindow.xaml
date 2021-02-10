@@ -39,17 +39,13 @@
                         <Image Source="crucible.ico" Width="64" Height="64" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <StackPanel Margin="20,0,0,0">
                             <TextBlock>
-                                <Span FontSize="30" Foreground="{StaticResource Editor_Light_Foreground}">Crucible</Span><LineBreak/>
-                                <Span FontSize="15" Foreground="{StaticResource Editor_Medium_Foreground}">Created by Unknown44</Span>
+                                <Span FontSize="30" Foreground="{StaticResource Editor_Light_Foreground}">Crucible V4.5</Span><LineBreak/>
+                                <Span FontSize="15" Foreground="{StaticResource Editor_Medium_Foreground}">Created by Citizens Reactor</Span>
                                 <Span FontSize="10" Foreground="{StaticResource Editor_Dark_Foreground}"></Span>
                             </TextBlock>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
-                <StackPanel>
-                    <TextBlock Foreground="{StaticResource Editor_Dark_Foreground}" TextAlignment="Center" Text="Maybe someday I can work on this game for real?"/>
-                    <TextBlock Foreground="{StaticResource Editor_Dark_Foreground}" TextAlignment="Center" FontSize="10" Text="70dc06436a0a6ded439731db07e3b69c"/>
-                </StackPanel>
             </StackPanel>
         </Grid>
     </Border>

@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
@@ -76,32 +75,18 @@ namespace Crucible
 
         public static T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
-            DependencyObject parentObject = null;
+            //get parent item
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
 
-            switch (child)
-            {
-                case ContextMenu contextMenu:
-                    parentObject = contextMenu.PlacementTarget;
-                    break;
-                default:
-                    parentObject = VisualTreeHelper.GetParent(child);
-                    break;
-            }
+            //we've reached the end of the tree
+            if (parentObject == null) return null;
 
-            if (parentObject == null)
-            {
-                return null;
-            }
-
+            //check if the parent matches the type we're looking for
             T parent = parentObject as T;
             if (parent != null)
-            {
-                return (parent);
-            }
+                return parent;
             else
-            {
                 return FindParent<T>(parentObject);
-            } 
         }
 
         public static dynamic Cast(dynamic obj, Type castTo)

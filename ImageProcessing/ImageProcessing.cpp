@@ -46,7 +46,7 @@ void BC5toRGBNormal(void* data, size_t data_length)
 		float r2 = r * r;
 		float g2 = g * g;
 
-		float z = 1.0f - sqrtf(r2 + g2);
+		float z = 1.0f - sqrt(r2 + g2);
 		float length = sqrtf(r2 + g2 + z * z);
 
 		r /= length;

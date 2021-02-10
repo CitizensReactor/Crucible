@@ -3,8 +3,7 @@
                     xmlns:ValueConverter="clr-namespace:Crucible.ValueConverter"
                     xmlns:controls="http://schemas.microsoft.com/netfx/2007/xaml/presentation"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:local="clr-namespace:Crucible"
-                    xmlns:customcontrols="clr-namespace:Crucible.CustomControls">
+                    xmlns:local="clr-namespace:Crucible">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Brushes.xaml"/>
         <ResourceDictionary Source="Scroll.xaml"/>
@@ -182,29 +181,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <StackPanel Orientation="Horizontal" Name="Panel">
-                        <Grid>
-                            <ContentPresenter x:Name="ContentSite"
+                        <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
                                         ContentSource="Header"
                                         Margin="10,2,5,2"/>
-                            <Grid.ContextMenu>
-                                <ContextMenu>
-                                    <customcontrols:CustomContextMenuItem Header="Save" ItemType="Save"/>
-                                    <customcontrols:CustomContextMenuItem Header="Close" ItemType="Close"/>
-                                    <Separator />
-                                    <customcontrols:CustomContextMenuItem Header="Close All" ItemType="CloseAll" />
-                                    <customcontrols:CustomContextMenuItem Header="Close All But This" ItemType="CloseAllButThis" />
-                                    <customcontrols:CustomContextMenuItem Header="Close All to the Left" ItemType="CloseAllToTheLeft" />
-                                    <customcontrols:CustomContextMenuItem Header="Close All to the Right" ItemType="CloseAllToTheRight" />
-                                    <Separator />
-                                    <customcontrols:CustomContextMenuItem Header="Copy Full Path" ItemType="CopyFullPath" />
-                                    <customcontrols:CustomContextMenuItem Header="Show In Explorer" ItemType="ShowInExplorer" />
-                                </ContextMenu>
-                            </Grid.ContextMenu>
-                        </Grid>
-               
-                        <customcontrols:ClosableTabButton />
+                        <local:ClosableTabButton />
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -430,7 +412,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type customcontrols:ClosableTabButton}">
+    <Style TargetType="{x:Type local:ClosableTabButton}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#20FFFFFF"/>
@@ -448,7 +430,7 @@
         <Setter Property="Foreground" Value="{StaticResource Editor_Medium_Foreground}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type customcontrols:ClosableTabButton}">
+                <ControlTemplate TargetType="{x:Type local:ClosableTabButton}">
                     <Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
                         <Canvas>
                             <TextBlock Text="✖" Foreground="{TemplateBinding Foreground}">

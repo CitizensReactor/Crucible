@@ -270,5 +270,15 @@ namespace Crucible.Filesystem
             //if (filesystemEntry == null) return;
             //filesystemEntry.Sort();
         }
+
+        private void treeView2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void treeView2_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -828,8 +828,12 @@ namespace DataCore2
                         {
                             var enumNameOffsetValue = enumNameOffsetValues[i];
                             var enumStringValue = rawDatabase.textBlock.GetString(enumNameOffsetValue);
-                            dynamic enumValue = Enum.Parse(propertyType, enumStringValue);
-                            enumArray[i] = enumValue;
+                            //enumStringValue null fix
+                            if (enumStringValue != "")
+                            {
+                                dynamic enumValue = Enum.Parse(propertyType, enumStringValue);
+                                enumArray[i] = enumValue;
+                            }
                         }
                         var enumCollection = Activator.CreateInstance(collectionType, new object[] { enumArray });
                         propertyInfo.SetValue(instance, enumCollection);
